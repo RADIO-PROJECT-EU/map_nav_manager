@@ -1,0 +1,30 @@
+navigation:
+    command: 'roslaunch summit_xl_navigation move_base.launch'
+    params: 'prefix:=summit_xl_a_'
+    autorun: false
+    process: ''
+
+mapping: 
+    command: 'roslaunch summit_xl_localization slam_gmapping.launch'
+    params: 'prefix:=summit_xl_a_'
+    autorun: false
+    process: ''
+   
+map_saver: 
+    command: 'rosrun map_server map_saver'
+    params: ''
+    autorun: false
+    process: ''
+    maps_folder: '/home/rnavarro/catkin_ws/src/map_nav_manager/map'
+
+map_server: 
+    command: 'rosrun map_server map_server'
+    params: ''
+    autorun: false
+    process: '' 
+
+localization:
+    command: 'roslaunch summit_xl_localization amcl.launch'
+    params: 'prefix:=summit_xl_a_'
+    autorun: false
+    process: '' 

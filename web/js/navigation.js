@@ -1,5 +1,5 @@
 var ros = new ROSLIB.Ros({
-	url : 'ws://192.168.1.12:9090'
+     url : 'ws://'+hostname+':9090'
 });
 
 var navigation = false
@@ -55,7 +55,7 @@ function startNavigation(){
 	}else{
 	var svc = new ROSLIB.Service({  
 		ros : ros,
-		name : '/map_nav_manager_node/start_navigation_srv',
+		name : '/map_nav_manager/start_navigation_srv',
 		messageType : 'std_srv/Trigger'
 	});
 
@@ -76,7 +76,7 @@ function stopNavigation(){
 	}else{
 	var svc = new ROSLIB.Service({  
 		ros : ros,
-		name : '/map_nav_manager_node/stop_navigation_srv',
+		name : '/map_nav_manager/stop_navigation_srv',
 		messageType : 'std_srv/Trigger'
 	});
 
@@ -111,7 +111,7 @@ function loadMap(){
 			
 			var svc = new ROSLIB.Service({  
 				ros : ros,
-				name : '/map_nav_manager_node/load_map_srv',
+				name : '/map_nav_manager/load_map_srv',
 				messageType : 'std_srv/Trigger'
 			});
 

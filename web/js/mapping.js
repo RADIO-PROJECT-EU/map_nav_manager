@@ -1,8 +1,9 @@
 var ros = new ROSLIB.Ros({
-	url : 'ws://192.168.1.12:9090'
+     url : 'ws://'+hostname+':9090'
 });
 
 var mapping = false
+var navigation = false
 
 //jquery init
 $(document).ready(function() {
@@ -51,26 +52,36 @@ $(document).ready(function() {
 	// Setup a client to listen to TFs.
     var tfClient = new ROSLIB.TFClient({
       ros : ros,
-      fixedFrame : '/map',
+      fixedFrame : map_frame,
       angularThres : 0.01,
       transThres : 0.01,
-      rate : 10.0
+      rate : 10.0,
+      serverName: namespace+'/tf2_web_republisher',
+      repubServiceName: namespace+'/republish_tfs'
     });
 
     // Setup the URDF client.
     var urdfClient = new ROS3D.UrdfClient({
       ros : ros,
+      param: namespace+'/robot_description',
       tfClient : tfClient,
-      path : 'http://resources.robotwebtools.org/',
-      rootObject : viewer.scene,
-      loader : ROS3D.COLLADA_LOADER
+      rootObject: viewer.scene
     });
     
     // Setup the marker client.
     var gridClient = new ROS3D.OccupancyGridClient({
       ros : ros,
       rootObject : viewer.scene,
-      continuous: true
+      continuous: true,
+      topic: map_topic
+    });
+    
+    var interactiveMarkerClient = new ROS3D.InteractiveMarkerClient({
+      ros : ros,
+      camera : viewer.camera,
+      rootObject : viewer.selectableObjects,
+      tfClient : tfClient,
+      topic: namespace+'/goto_interactive_marker'
     });
 	
 });
@@ -78,11 +89,11 @@ $(document).ready(function() {
 function startMapping(){
 
 	if(mapping == true){
-		window.alert("Error: Nodo SLAM-Gmapping iniciado");
+		window.alert("Error: mapping already running");
 	}else{
 	var svc = new ROSLIB.Service({  
 		ros : ros,
-		name : '/map_nav_manager_node/start_mapping_srv',
+		name : namespace+'/map_nav_manager/start_mapping_srv',
 		messageType : 'std_srv/Trigger'
 	});
 
@@ -90,20 +101,63 @@ function startMapping(){
 		console.log("Respuesta Recibida");
 	});	
 	mapping = true;
-	window.alert("El nodo SLAM-Gmapping se ha iniciado. Presione OK.");
+	window.alert("Mapping process initiated. Press OK.");
 	
 	}
 
 }
 
-function stopMapping(){
 
-	if(mapping == false){
-		window.alert("Error: Nodo SLAM-Gmapping no iniciado");
+function startNavigation(){
+
+	if(navigation == true){
+		window.alert("Error: navigation already running");
 	}else{
 	var svc = new ROSLIB.Service({  
 		ros : ros,
-		name : '/map_nav_manager_node/stop_mapping_srv',
+		name : namespace+'/map_nav_manager/start_navigation_srv',
+		messageType : 'std_srv/Trigger'
+	});
+
+	svc.callService(function(res){
+		console.log("Respuesta Recibida");
+	});	
+	navigation = true;
+	window.alert("Navigation process initiated. Press OK.");
+	
+	}
+
+}
+
+function stopNavigation(){
+
+	if(navigation == false){
+		window.alert("Error: navigation not running");
+	}else{
+	var svc = new ROSLIB.Service({  
+		ros : ros,
+		name :  namespace+'/map_nav_manager/stop_navigation_srv',
+		messageType : 'std_srv/Trigger'
+	});
+
+	svc.callService(function(res){
+		console.log("Respuesta Recibida");
+	});
+	navigation = false;
+	window.alert("Navigation process stopped. press OK.");
+	
+	}
+}
+
+
+function stopMapping(){
+
+	if(mapping == false){
+		window.alert("Error: mapping process not initiated");
+	}else{
+	var svc = new ROSLIB.Service({  
+		ros : ros,
+		name :  namespace+'/map_nav_manager/stop_mapping_srv',
 		messageType : 'std_srv/Trigger'
 	});
 
@@ -111,7 +165,7 @@ function stopMapping(){
 		console.log("Respuesta Recibida");
 	});
 	mapping = false;
-	window.alert("El nodo SLAM-Gmapping se ha parado. Presione OK.");
+	window.alert("Mapping process stopped. Press OK.");
 	
 	}
 }
@@ -134,7 +188,7 @@ function saveMap(){
 			
 			var svc = new ROSLIB.Service({  
 				ros : ros,
-				name : '/map_nav_manager_node/save_map_srv',
+				name :  namespace+'/map_nav_manager/save_map_srv',
 				messageType : 'map_nav_manager/SetFilename'
 			});
 

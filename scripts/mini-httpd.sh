@@ -14,4 +14,6 @@ sleep 1
 
 echo "Launching mini-httpd..."
 
-/usr/sbin/mini-httpd -C `rospack find map_nav_manager`/scripts/mini-httpd.conf -d `rospack find map_nav_manager`
+cd `rospack find map_nav_manager`/web
+python -m SimpleHTTPServer 8001
+#/usr/sbin/mini-httpd -C `rospack find map_nav_manager`/scripts/mini-httpd.conf -d `rospack find map_nav_manager`
