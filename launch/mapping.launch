@@ -1,8 +1,0 @@
-<?xml version="1.0"?>
-<launch>
-
-   <include file="$(find turtlebot_navigation)/launch/includes/gmapping.launch.xml">
-     <arg name="scan_topic" value="/hokuyo/scan"/>
-  </include>
-
-</launch>
