@@ -7,7 +7,7 @@ This packages was based on the package map_nav_manager from [Jose Rapado](https:
 
 ## Dependencies
 
-* Firefox navigator 
+* Firefox navigator
 
 ## Install & configuration
 
