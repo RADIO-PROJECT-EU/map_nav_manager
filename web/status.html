@@ -6,6 +6,10 @@
   <!-- author Robotnik 
  VERSION FOR SUMMITXL STEEL ROBOT
 -->
+  <!-- Bootstrap -->
+  <link href="css/bootstrap.min.css" rel="stylesheet">
+  <link href="css/common.css" rel="stylesheet">
+
   <link rel="stylesheet" href="css/status/my_mini.css">
   <link rel="stylesheet" href="css/status/bootOver.css">
   <link rel="stylesheet" href="css/status/jquery-ui.css">
@@ -22,8 +26,12 @@
 <body>
   <div id="tabs" style="height: auto;">
     <ul>
-      <a href="http://www.robotnik.eu/">
-        <img width="200" src="images/robotnik.png"> </a>
+        <div>
+            <a href="http://www.robotnik.eu/">
+              <img width="200" src="images/robotnik.png"> 
+            </a>
+        </div>
+      
       <li>
         <a href="#tabs-3">Robot Status</a>
       </li>
@@ -35,7 +43,7 @@
       </li>
     </ul>
     <!-- CAMERA TAB -->
-    <!----------------------->
+    <!---------------------->
     <div id="tabs-1" style="height:100em">
       <div style="float:left">
         <img width="600" height="600" src="http://192.168.0.186/axis-cgi/mjpg/video.cgi?videocodec=h264&amp;streamprofile=Bandwidth"> </div>
@@ -44,305 +52,329 @@
         <!-- Button to save image, NEEDS image transport node in summit_xl_web.launch (commented) -->
         <!--input type="button" Value="Save Image" onClick="saveImage()" class = "btn btn-danger"/-->
         <br> <span id="imageStatus"></span>
-        <h3>Zoom</h3>
-        <div id="slider_camera_front_zoom" style="width: 25em; float:left; margin-left: 1em;"></div>
-        <h3>Camera Front</h3>
-        <div>
-          <p></p>
-          <table border="0">
+        <table border="0">
             <tbody>
-              <tr>
-                <th> </th>
-                <th>
-                  <input type="button" value="+" onclick="move_camera_front_top()" class="btn btn-danger"> </th>
-              </tr>
-              <tr></tr>
-              <tr> </tr>
-              <tr>
-                <td>
-                  <input type="button" value="- " onclick="move_camera_front_left()" class="btn btn-danger"> </td>
-                <td>
-                  <input type="button" value="H" onclick="init_camera_front()" class="btn btn-danger"> </td>
-                <td>
-                  <input type="button" value="+" onclick="move_camera_front_right()" class="btn btn-danger"> </td>
-              </tr>
-              <tr>
-                <th> </th>
-                <td>
-                  <input type="button" value="- " onclick="move_camera_front_dowm()" class="btn btn-danger"> </td>
-              </tr>
-              <tr>
-                <th> </th>
-              </tr>
+                <tr>
+                    <td>
+                        <h3>Zoom</h3>
+                        <div id="slider_camera_front_zoom" style="width: 25em; float:left; margin-left: 1em;"></div>
+                        <h3>Camera Front</h3>
+                        <div>
+                            <p></p>
+                            <table border="0">
+                            <tbody>
+                                <tr>
+                                <th> </th>
+                                <th>
+                                    <input type="button" value="+" onclick="move_camera_front_top()" class="btn btn-danger"> </th>
+                                </tr>
+                                <tr></tr>
+                                <tr> </tr>
+                                <tr>
+                                <td>
+                                    <input type="button" value="- " onclick="move_camera_front_left()" class="btn btn-danger"> </td>
+                                <td>
+                                    <input type="button" value="H" onclick="init_camera_front()" class="btn btn-danger"> </td>
+                                <td>
+                                    <input type="button" value="+" onclick="move_camera_front_right()" class="btn btn-danger"> </td>
+                                </tr>
+                                <tr>
+                                <th> </th>
+                                <td>
+                                    <input type="button" value="- " onclick="move_camera_front_dowm()" class="btn btn-danger"> </td>
+                                </tr>
+                                <tr>
+                                <th> </th>
+                                </tr>
+                            </tbody>
+                            </table>
+                        </div>      
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                            <div style="float:left">
+                                    <br> <span id="videoStatus"></span>
+                                    <!-- Button to save image, NEEDS image transport node in summit_xl_web.launch (commented) -->
+                                    <!--input type="button" Value="Save Image" onClick="saveImage()" class = "btn btn-danger"/-->
+                                    <br> <span id="imageStatus"></span>
+                                    <h3>Zoom</h3>
+                                    <div id="slider_camera_rear_zoom" style="width: 25em; float:left; margin-left: 1em;"></div>
+                                    <h3>Camera Rear</h3>
+                                    <div>
+                                      <p></p>
+                                      <table border="0">
+                                        <tbody>
+                                          <tr>
+                                            <th> </th>
+                                            <th>
+                                              <input type="button" value="+" onclick="move_camera_rear_top()" class="btn btn-danger"> </th>
+                                          </tr>
+                                          <tr></tr>
+                                          <tr> </tr>
+                                          <tr>
+                                            <td>
+                                              <input type="button" value="- " onclick="move_camera_rear_left()" class="btn btn-danger"> </td>
+                                            <td>
+                                              <input type="button" value="H" onclick="init_camera_rear()" class="btn btn-danger"> </td>
+                                            <td>
+                                              <input type="button" value="+" onclick="move_camera_rear_right()" class="btn btn-danger"> </td>
+                                          </tr>
+                                          <tr>
+                                            <th> </th>
+                                            <td>
+                                              <input type="button" value="- " onclick="move_camera_rear_dowm()" class="btn btn-danger"> </td>
+                                          </tr>
+                                          <tr>
+                                            <th> </th>
+                                          </tr>
+                                        </tbody>
+                                      </table>
+                                    </div>
+                                  </div>
+                    </td>
+                </tr>
             </tbody>
-          </table>
-        </div>
+        </table>
+        
       </div>
       <div style="float:left">
-        <img width="600" height="600" src="http://192.168.0.187/axis-cgi/mjpg/video.cgi?videocodec=h264&amp;streamprofile=Bandwidth"> </div>
-      <div style="float:left">
-        <br> <span id="videoStatus"></span>
-        <!-- Button to save image, NEEDS image transport node in summit_xl_web.launch (commented) -->
-        <!--input type="button" Value="Save Image" onClick="saveImage()" class = "btn btn-danger"/-->
-        <br> <span id="imageStatus"></span>
-        <h3>Zoom</h3>
-        <div id="slider_camera_rear_zoom" style="width: 25em; float:left; margin-left: 1em;"></div>
-        <h3>Camera Rear</h3>
-        <div>
-          <p></p>
-          <table border="0">
-            <tbody>
-              <tr>
-                <th> </th>
-                <th>
-                  <input type="button" value="+" onclick="move_camera_rear_top()" class="btn btn-danger"> </th>
-              </tr>
-              <tr></tr>
-              <tr> </tr>
-              <tr>
-                <td>
-                  <input type="button" value="- " onclick="move_camera_rear_left()" class="btn btn-danger"> </td>
-                <td>
-                  <input type="button" value="H" onclick="init_camera_rear()" class="btn btn-danger"> </td>
-                <td>
-                  <input type="button" value="+" onclick="move_camera_rear_right()" class="btn btn-danger"> </td>
-              </tr>
-              <tr>
-                <th> </th>
-                <td>
-                  <input type="button" value="- " onclick="move_camera_rear_dowm()" class="btn btn-danger"> </td>
-              </tr>
-              <tr>
-                <th> </th>
-              </tr>
-            </tbody>
-          </table>
-        </div>
+        <img width="600" height="600" src="http://192.168.0.187/axis-cgi/mjpg/video.cgi?videocodec=h264&amp;streamprofile=Bandwidth">
       </div>
+      
     </div>
     <!-- ROBOT STATE TAB -->
-    <!----------------------->
+    <!---------------------->
     <div id="tabs-3">
-      <div id="sensortopic">
-        <!--div id="yaw_angle">Angulo inclinacion = <span></span></div-->
-        <br>
-        <table border="0px">
-          <tbody>
-            <tr>
-              <td> IMU state &nbsp;&nbsp;&nbsp;&nbsp; </td>
-              <td> Battery State &nbsp;&nbsp;&nbsp;&nbsp; </td>
-              <td> IMU temperature &nbsp;&nbsp;&nbsp;&nbsp; </td>
-              <td> Stop Button </td>
-            </tr>
-            <tr>
-              <td style="text-align:center">
-                <div id="imu_status"> <span></span></div>
-              </td>
-              <td style="text-align:center">
-                <div id="battery_ok"> <span></span></div>
-              </td>
-              <td style="text-align:center">
-                <div id="imu_temperature_alarm"> <span></span></div>
-              </td>
-              <td style="text-align:center">
-                <div id="emergency_stop"> <span></span></div>
-              </td>
-            </tr>
-          </tbody>
-        </table>
-        <br>
-        <h3>Battery</h3>
-        <div id="progressbar_battery" style="width: 20em; float:left; margin-left:1em" class="ui-progressbar3"></div>
-        <br> &nbsp;&nbsp; 0% &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 25% &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 50% &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 75% &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-        100%
-        <br>
-        <br>
-        <div id="battery_status">Battery voltage = <span></span></div>
-      </div>
-      <h3>IMUsss</h3>
-      <div id="imu_temperature">IMU temperature = <span></span></div>
-      <h3>GPS</h3>
-      <div id="gps_latitude">Latitude = <span></span></div>
-      <div id="gps_longitude">Longitude = <span></span></div>
-      <div id="gps_altitude">Altitude = <span></span></div>
-      <h3>Odometry</h3>
-      <table>
+      <table border="0px" width="100%">
         <tbody>
           <tr>
-            <td style="width: 4em"></td>
-            <td style="width: 4em">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;x</td>
-            <td style="width: 4em">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;y</td>
-            <td style="width: 4em">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;z</td>
-          </tr>
-          <tr>
-            <td>Position</td>
-            <td style="width: 4em">
-              <div id="odometry_position_x" style="float:right"><span></span></div>
+            <td>
+              <div id="sensortopic">
+                <table border="0px">
+                    <tbody>
+                    <tr>
+                        <td> IMU state &nbsp;&nbsp;&nbsp;&nbsp; </td>
+                        <td> Battery State &nbsp;&nbsp;&nbsp;&nbsp; </td>
+                        <td> IMU temperature &nbsp;&nbsp;&nbsp;&nbsp; </td>
+                        <td> Stop Button </td>
+                    </tr>
+                    <tr>
+                        <td style="text-align:center">
+                        <div id="imu_status"> <span></span></div>
+                        </td>
+                        <td style="text-align:center">
+                        <div id="battery_ok"> <span></span></div>
+                        </td>
+                        <td style="text-align:center">
+                        <div id="imu_temperature_alarm"> <span></span></div>
+                        </td>
+                        <td style="text-align:center">
+                        <div id="emergency_stop"> <span></span></div>
+                        </td>
+                    </tr>
+                    </tbody>
+              </table>
+            <br>
+            <h3>Battery</h3>
+            <div id="progressbar_battery" style="width: 20em; float:left; margin-left:1em" class="ui-progressbar3"></div>
+              <br> &nbsp;&nbsp; 0% &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 25% &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 50% &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 75% &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+              100%
+              <br>
+              <br>
+              <div id="battery_status">Battery voltage = <span></span></div>
+            </div>
+            <h3>IMU</h3>
+            <div id="imu_temperature">IMU temperature = <span></span></div>
+            <h3>GPS</h3>
+            <div id="gps_latitude">Latitude = <span></span></div>
+            <div id="gps_longitude">Longitude = <span></span></div>
+            <div id="gps_altitude">Altitude = <span></span></div>
+            <h3>Odometry</h3>
+            <table>
+              <tbody>
+                <tr>
+                  <td style="width: 4em"></td>
+                  <td style="width: 4em">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;x</td>
+                  <td style="width: 4em">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;y</td>
+                  <td style="width: 4em">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;z</td>
+                </tr>
+                <tr>
+                  <td>Position</td>
+                  <td style="width: 4em">
+                    <div id="odometry_position_x" style="float:right"><span></span></div>
+                  </td>
+                  <td style="width: 4em">
+                    <div id="odometry_position_y" style="float:right"><span></span></div>
+                  </td>
+                  <td style="width: 4em">
+                    <div id="odometry_position_z" style="float:right"><span></span></div>
+                  </td>
+                </tr>
+                <tr>
+                  <td>Orientation</td>
+                  <td style="width: 4em">
+                    <div id="odometry_orientation_x" style="float:right"><span></span></div>
+                  </td>
+                  <td style="width: 4em">
+                    <div id="odometry_orientation_y" style="float:right"><span></span></div>
+                  </td>
+                  <td style="width: 4em">
+                    <div id="odometry_orientation_z" style="float:right"><span></span></div>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+            <br>
+            <input type="button" value="Reset odometry" onclick="reset_odometry()" class="btn btn-danger">
+            <br>
             </td>
-            <td style="width: 4em">
-              <div id="odometry_position_y" style="float:right"><span></span></div>
-            </td>
-            <td style="width: 4em">
-              <div id="odometry_position_z" style="float:right"><span></span></div>
-            </td>
-          </tr>
-          <tr>
-            <td>Orientation</td>
-            <td style="width: 4em">
-              <div id="odometry_orientation_x" style="float:right"><span></span></div>
-            </td>
-            <td style="width: 4em">
-              <div id="odometry_orientation_y" style="float:right"><span></span></div>
-            </td>
-            <td style="width: 4em">
-              <div id="odometry_orientation_z" style="float:right"><span></span></div>
+            <td> 
+                    <br>
+                    <h3>Motor Status</h3>
+                    <table border="0px">
+                      <tbody>
+                        <tr>
+                          <td> Front Left Wheel &nbsp;&nbsp;&nbsp;&nbsp; </td>
+                          <td width="125"> </td>
+                          <td> Front Right Wheel &nbsp;&nbsp;&nbsp;&nbsp; </td>
+                          <td> </td>
+                        </tr>
+                        <tr>
+                          <td style="text-align:center">
+                            <div id="front_left_wheel_status"> <span>
+                              
+                              </span></div>
+                          </td>
+                          <td>
+                            <input type="button" value="Flags" class="btn btn-danger" id="button_flw"> </td>
+                          <td style="text-align:center">
+                            <div id="front_right_wheel_status"> <span></span></div>
+                          </td>
+                          <td>
+                            <input type="button" value="Flags" class="btn btn-danger" id="button_frw"> </td>
+                        </tr>
+                        <tr>
+                          <td> Back Left Wheel &nbsp;&nbsp;&nbsp;&nbsp; </td>
+                          <td> </td>
+                          <td> Back Right Wheel </td>
+                          <td> </td>
+                        </tr>
+                        <tr>
+                          <td style="text-align:center">
+                            <div id="back_left_wheel_status"> <span></span></div>
+                          </td>
+                          <td>
+                            <input type="button" value="Flags" class="btn btn-danger" id="button_blw"> </td>
+                          <td style="text-align:center">
+                            <div id="back_right_wheel_status"> <span></span></div>
+                          </td>
+                          <td>
+                            <input type="button" value="Flags" class="btn btn-danger" id="button_brw"> </td>
+                        </tr>
+                      </tbody>
+                    </table>
+                    <br>
+                    <!--input type="button" Value="Flags front left wheel" class = "btn btn-danger" id="button_flw"/>
+                        <input type="button" Value="Flags front right wheel" class = "btn btn-danger" id="button_frw"/>
+                        <br><br>
+                        <input type="button" Value="Flags back left wheel" class = "btn btn-danger" id="button_blw"/>
+                        <input type="button" Value="Flags back right wheel" class = "btn btn-danger" id="button_brw"/-->
+                    <div id="dialog_flw" title="Flags front left wheel"> Flags info:
+                      <br> Flag is off
+                      <br> <b>Flag is on</b>
+                      <br> <ins>Flag has been activated before</ins>
+                      <br>
+                      <br>
+                      <div id="flw_state">State = <span></span></div>
+                      <div id="flw_status">Status = <span></span></div>
+                      <br> Flags:
+                      <div id="flw_status_words"><span></span></div>
+                      <br> Driver flags:
+                      <div id="flw_driver_status_words"><span></span></div>
+                    </div>
+                    <div id="dialog_frw" title="Flags front right wheel"> Flags info:
+                      <br> Flag is off
+                      <br> <b>Flag is on</b>
+                      <br> <ins>Flag has been activated before</ins>
+                      <br>
+                      <br>
+                      <div id="frw_state">State = <span></span></div>
+                      <div id="frw_status">Status = <span></span></div>
+                      <br> Flags:
+                      <div id="frw_status_words"><span></span></div>
+                      <br> Driver flags:
+                      <div id="frw_driver_status_words"><span></span></div>
+                    </div>
+                    <div id="dialog_blw" title="Flags back left wheel"> Flags info:
+                      <br> Flag is off
+                      <br> <b>Flag is on</b>
+                      <br> <ins>Flag has been activated before</ins>
+                      <br>
+                      <br>
+                      <div id="blw_state">State = <span></span></div>
+                      <div id="blw_status">Status = <span></span></div>
+                      <br> Flags:
+                      <div id="blw_status_words"><span></span></div>
+                      <br> Driver flags:
+                      <div id="blw_driver_status_words"><span></span></div>
+                    </div>
+                    <div id="dialog_brw" title="Flags back right wheel"> Flags info:
+                      <br> Flag is off
+                      <br> <b>Flag is on</b>
+                      <br> <ins>Flag has been activated before</ins>
+                      <br>
+                      <br>
+                      <div id="brw_state">State = <span></span></div>
+                      <div id="brw_status">Status = <span></span></div>
+                      <br> Flags:
+                      <div id="brw_status_words"><span></span></div>
+                      <br> Driver flags:
+                      <div id="brw_driver_status_words"><span></span></div>
+                    </div>
+                    <h3>Robot Control</h3>
+                    <div>
+                      <p></p>
+                      <table border="0">
+                        <tbody>
+                          <tr>
+                            <th> </th>
+                            <th>
+                              <input type="button" value="+" onclick="Foward()" class="btn btn-danger"> </th>
+                          </tr>
+                          <tr></tr>
+                          <tr> </tr>
+                          <tr>
+                            <td>
+                              <input type="button" value="- " onclick="Left()" class="btn btn-danger"> </td>
+                            <td>
+                              <input type="button" value="H" onclick="StopRobot()" class="btn btn-danger"> </td>
+                            <td>
+                              <input type="button" value="+" onclick="Right()" class="btn btn-danger"> </td>
+                          </tr>
+                          <tr>
+                            <th> </th>
+                            <td>
+                              <input type="button" value="- " onclick="Back()" class="btn btn-danger"> </td>
+                          </tr>
+                          <tr>
+                            <th> </th>
+                          </tr>
+                        </tbody>
+                      </table>
+                      <br>
+                      <br>
+                      <button type="button" class="btn btn-sm btn-danger" width="100" align="middle" onclick="goIndex()" alt="" height="20">
+                        <br>Home </button>
+                    </div>
             </td>
           </tr>
         </tbody>
       </table>
-      <br>
-      <input type="button" value="Reset odometry" onclick="reset_odometry()" class="btn btn-danger">
-      <br>
-      <br>
-      <h3>Motor Status</h3>
-      <table border="0px">
-        <tbody>
-          <tr>
-            <td> Front Left Wheel &nbsp;&nbsp;&nbsp;&nbsp; </td>
-            <td width="125"> </td>
-            <td> Front Right Wheel &nbsp;&nbsp;&nbsp;&nbsp; </td>
-            <td> </td>
-          </tr>
-          <tr>
-            <td style="text-align:center">
-              <div id="front_left_wheel_status"> <span>
-                
-                </span></div>
-            </td>
-            <td>
-              <input type="button" value="Flags" class="btn btn-danger" id="button_flw"> </td>
-            <td style="text-align:center">
-              <div id="front_right_wheel_status"> <span></span></div>
-            </td>
-            <td>
-              <input type="button" value="Flags" class="btn btn-danger" id="button_frw"> </td>
-          </tr>
-          <tr>
-            <td> Back Left Wheel &nbsp;&nbsp;&nbsp;&nbsp; </td>
-            <td> </td>
-            <td> Back Right Wheel </td>
-            <td> </td>
-          </tr>
-          <tr>
-            <td style="text-align:center">
-              <div id="back_left_wheel_status"> <span></span></div>
-            </td>
-            <td>
-              <input type="button" value="Flags" class="btn btn-danger" id="button_blw"> </td>
-            <td style="text-align:center">
-              <div id="back_right_wheel_status"> <span></span></div>
-            </td>
-            <td>
-              <input type="button" value="Flags" class="btn btn-danger" id="button_brw"> </td>
-          </tr>
-        </tbody>
-      </table>
-      <br>
-      <!--input type="button" Value="Flags front left wheel" class = "btn btn-danger" id="button_flw"/>
-		  <input type="button" Value="Flags front right wheel" class = "btn btn-danger" id="button_frw"/>
-		  <br><br>
-		  <input type="button" Value="Flags back left wheel" class = "btn btn-danger" id="button_blw"/>
-		  <input type="button" Value="Flags back right wheel" class = "btn btn-danger" id="button_brw"/-->
-      <div id="dialog_flw" title="Flags front left wheel"> Flags info:
-        <br> Flag is off
-        <br> <b>Flag is on</b>
-        <br> <ins>Flag has been activated before</ins>
-        <br>
-        <br>
-        <div id="flw_state">State = <span></span></div>
-        <div id="flw_status">Status = <span></span></div>
-        <br> Flags:
-        <div id="flw_status_words"><span></span></div>
-        <br> Driver flags:
-        <div id="flw_driver_status_words"><span></span></div>
-      </div>
-      <div id="dialog_frw" title="Flags front right wheel"> Flags info:
-        <br> Flag is off
-        <br> <b>Flag is on</b>
-        <br> <ins>Flag has been activated before</ins>
-        <br>
-        <br>
-        <div id="frw_state">State = <span></span></div>
-        <div id="frw_status">Status = <span></span></div>
-        <br> Flags:
-        <div id="frw_status_words"><span></span></div>
-        <br> Driver flags:
-        <div id="frw_driver_status_words"><span></span></div>
-      </div>
-      <div id="dialog_blw" title="Flags back left wheel"> Flags info:
-        <br> Flag is off
-        <br> <b>Flag is on</b>
-        <br> <ins>Flag has been activated before</ins>
-        <br>
-        <br>
-        <div id="blw_state">State = <span></span></div>
-        <div id="blw_status">Status = <span></span></div>
-        <br> Flags:
-        <div id="blw_status_words"><span></span></div>
-        <br> Driver flags:
-        <div id="blw_driver_status_words"><span></span></div>
-      </div>
-      <div id="dialog_brw" title="Flags back right wheel"> Flags info:
-        <br> Flag is off
-        <br> <b>Flag is on</b>
-        <br> <ins>Flag has been activated before</ins>
-        <br>
-        <br>
-        <div id="brw_state">State = <span></span></div>
-        <div id="brw_status">Status = <span></span></div>
-        <br> Flags:
-        <div id="brw_status_words"><span></span></div>
-        <br> Driver flags:
-        <div id="brw_driver_status_words"><span></span></div>
-      </div>
-      <h3>Robot Control</h3>
-      <div>
-        <p></p>
-        <table border="0">
-          <tbody>
-            <tr>
-              <th> </th>
-              <th>
-                <input type="button" value="+" onclick="Foward()" class="btn btn-danger"> </th>
-            </tr>
-            <tr></tr>
-            <tr> </tr>
-            <tr>
-              <td>
-                <input type="button" value="- " onclick="Left()" class="btn btn-danger"> </td>
-              <td>
-                <input type="button" value="H" onclick="StopRobot()" class="btn btn-danger"> </td>
-              <td>
-                <input type="button" value="+" onclick="Right()" class="btn btn-danger"> </td>
-            </tr>
-            <tr>
-              <th> </th>
-              <td>
-                <input type="button" value="- " onclick="Back()" class="btn btn-danger"> </td>
-            </tr>
-            <tr>
-              <th> </th>
-            </tr>
-          </tbody>
-        </table>
-        <br>
-        <br>
-        <button type="button" class="btn btn-sm btn-danger" width="100" align="middle" onclick="goIndex()" alt="" height="20">
-          <br>Home </button>
-      </div>
+    
     </div>
     <!-- CONFIGURATION TAB -->
-    <!----------------------->
+    <!---------------------->
     <div id="tabs-2">
       <br>
       <br>
