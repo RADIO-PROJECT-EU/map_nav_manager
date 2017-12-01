@@ -15,7 +15,7 @@ map_saver:
     params: ''
     autorun: false
     process: ''
-    maps_folder: '/home/catkin_ws/src/map_nav_manager/map'
+    maps_folder: '/home/asoriano/workspaces/multi_summitxl/src/map_nav_manager/map'
 
 map_server: 
     command: 'rosrun map_server map_server'

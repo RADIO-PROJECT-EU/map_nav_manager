@@ -10,6 +10,7 @@
   <!-- Bootstrap -->
   <link href="css/bootstrap.min.css" rel="stylesheet">
   <link href="css/common.css" rel="stylesheet">
+  <link href="css/poi.css" rel="stylesheet">
   <script type="text/javascript" src="js/global_config.js"></script>
   <script type="text/javascript" src="js/three.js"></script>
   <script type="text/javascript" src="js/ColladaLoader.js"></script>
@@ -28,8 +29,7 @@
       <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
       <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
     <![endif]-->
-  <link rel="icon" href="images/favicon.ico">
-</head>
+  <link rel="icon" href="images/favicon.ico"> </head>
 
 <body>
   <div class="page-header">
@@ -147,24 +147,34 @@
 									         </table>
 									     -->
               <tr>
-                <td><label for="text">POI: </label>
-                  <div class="tab">
-                    <button class="tablinks" onclick="openCity(event, 'London')">London</button>
-                    <button class="tablinks" onclick="openCity(event, 'Paris')">Paris</button>
-                    <button class="tablinks" onclick="openCity(event, 'Tokyo')">Tokyo</button>
+                <td><label for="text">POI (label: x,y,theta): </label>
+                  <br>
+                  <div id="radiopoi" class="funkyradio" style="max-height: 300px; overflow: auto;">
+                    <div class="funkyradio-success">
+                      <input type="radio" name="radio" id="radio0" value="0"> <label for="radio0"> </label> </div>
+                    <div class="funkyradio-success">
+                      <input type="radio" name="radio" id="radio1" value="1"> <label for="radio1"> </label> </div>
+                    <div class="funkyradio-success">
+                      <input type="radio" name="radio" id="radio2" value="2"> <label for="radio2"> </label> </div>
+                    <div class="funkyradio-success">
+                      <input type="radio" name="radio" id="radio3" value="3"> <label for="radio3"> </label> </div>
+                    <div class="funkyradio-success">
+                      <input type="radio" name="radio" id="radio4" value="4"> <label for="radio4"> </label> </div>
+                    <div class="funkyradio-success">
+                      <input type="radio" name="radio" id="radio5" value="5"> <label for="radio5"> </label> </div>
+                    <div class="funkyradio-success">
+                      <input type="radio" name="radio" id="radio6" value="6"> <label for="radio6"> </label> </div>
+                    <div class="funkyradio-success">
+                      <input type="radio" name="radio" id="radio7" value="7"> <label for="radio7"> </label> </div>
+                    <div class="funkyradio-success">
+                      <input type="radio" name="radio" id="radio8" value="8"> <label for="radio8"> </label> </div>
+                    <div class="funkyradio-success">
+                      <input type="radio" name="radio" id="radio9" value="9"> <label for="radio9"> </label> </div>
                   </div>
-                  <div id="London" class="tabcontent">
-                    <h3>London</h3>
-                    <p>London is the capital city of England.</p>
-                  </div>
-                  <div id="Paris" class="tabcontent">
-                    <h3>Paris</h3>
-                    <p>Paris is the capital of France.</p>
-                  </div>
-                  <div id="Tokyo" class="tabcontent">
-                    <h3>Tokyo</h3>
-                    <p>Tokyo is the capital of Japan.</p>
-                  </div>
+                </td>
+                <td>
+                  <button class="btn col-xs-12 btn-info" id="update-data" onclick="updatePOI()"> Update </button>
+                  <button class="btn btn-primary col-xs-12" id="get-checked-data" onclick="sendgoal()">Send</button>
                 </td>
               </tr>
             </tbody>

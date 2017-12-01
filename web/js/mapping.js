@@ -4,6 +4,7 @@ var ros = new ROSLIB.Ros({
 
 var mapping = false
 var navigation = false
+var max_poi=10;
 
 //jquery init
 $(document).ready(function() {
@@ -82,7 +83,9 @@ $(document).ready(function() {
       rootObject : viewer.selectableObjects,
       tfClient : tfClient,
       topic: namespace+'/goto_interactive_marker'
-    });
+	});
+	
+	updatePOI();
 	
 });
 
@@ -200,7 +203,7 @@ function saveMap(){
 				console.log("Respuesta Recibida");
 			});	
 
-			window.alert("El mapa se ha guardado con \u00e9xito.");
+			window.alert("El mapa se ha guardado con éxito.");
 		}
 	}
 
@@ -211,6 +214,101 @@ function goIndex(){
 		stopMapping();
 	}
     window.location.href = "index.html";
+}
+
+function updatePOI(){
+	var svc = new ROSLIB.Service({  
+		ros : ros,
+		name :  namespace+'/labeled_pose_list',	
+	});
+
+	var data = new ROSLIB.ServiceRequest({
+	});
+	
+	//get the pointer of all the labels
+	var radioitems=$('#radiopoi input:radio');
+	//hide all the radios
+	for(i = 0; i < radioitems.length; i++){
+		$("label[for=radio"+i+"]").hide();
+	}
+
+	svc.callService(data, function(res){
+
+		console.log("Respuesta Recibida");
+     
+		var newlabel;
+		var POIid;
+		
+		//asign the value of the received data to the radio labels	
+		for(i = 0; i < (res.pose_list.length) && i < max_poi; i++){
+			newlabel= res.pose_list[i].label + ":" + res.pose_list[i].pose.x + ","+res.pose_list[i].pose.y + "," + res.pose_list[i].pose.theta;			
+			radioname="radio"+i;
+			$("label[for="+radioname+"]").html(""+newlabel);
+			$("label[for="+radioname+"]").show();
+			POIid = document.getElementById(radioname);
+			POIid.setAttribute("value", newlabel);		
+		}		
+	});
+}
+
+function sendgoal(){
+	if(navigation==false){
+		window.alert("Navigation process is not running. Press OK.");
+	}else{
+		
+		var ros = this.ros;
+		var serverName = namespace + '/move_base';
+		var actionName = 'move_base_msgs/MoveBaseAction';
+		var POIposition = new ROSLIB.Vector3({x:0, y:0});
+		var POIorientation = new ROSLIB.Quaternion({x:0, y:0, z:0, w:1});
+		var POIvalue = document.querySelector('input[name = "radio"]:checked').value;
+		console.log("Value selected:"+POIvalue);
+		
+		//splitting the string		
+		var POITagAndPose= POIvalue.split(":");		
+		var POIPose=POITagAndPose[1]+"";
+		var POICoordinates=POIPose.split(",");		
+		
+		////create the pose from the radio selected
+
+		//position
+		POIposition.x=parseFloat(POICoordinates[0]);
+		POIposition.y=parseFloat(POICoordinates[1]);
+
+		//angle to quaternion
+		var thetaRadians = POICoordinates[2];	
+		var qz =  Math.sin(thetaRadians/2.0);
+		var qw =  Math.cos(thetaRadians/2.0);
+		POIorientation[2]=qz;
+		POIorientation[3]=qw;		
+	
+		var pose = new ROSLIB.Pose({
+			position : POIposition,
+			orientation : POIorientation
+		  });		
+		
+		// setup the actionlib client
+  		var actionClient = new ROSLIB.ActionClient({
+    		ros : ros,
+    		actionName : actionName,
+    		serverName : serverName
+  		});
+
+		  // create a goal
+		var goal = new ROSLIB.Goal({
+			actionClient : actionClient,
+			goalMessage : {
+			  target_pose : {
+				header : {
+				  frame_id : map_frame
+				},
+				pose : pose
+			  }
+			}
+		  });
+		  goal.send();
+		  console.log("goal to:"+pose.position.x+":"+pose.position.y);
+	}
 }
 
 function goNavigation(){
