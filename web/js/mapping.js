@@ -4,7 +4,9 @@ var ros = new ROSLIB.Ros({
 
 var mapping = false
 var navigation = false
-
+var localization = false
+var map_server = false
+ 
 //jquery init
 $(document).ready(function() {
 
@@ -100,7 +102,6 @@ function startMapping(){
 	svc.callService(function(res){
 		console.log("Respuesta Recibida");
 	});	
-	mapping = true;
 	window.alert("Mapping process initiated. Press OK.");
 	
 	}
@@ -122,7 +123,6 @@ function startNavigation(){
 	svc.callService(function(res){
 		console.log("Respuesta Recibida");
 	});	
-	navigation = true;
 	window.alert("Navigation process initiated. Press OK.");
 	
 	}
@@ -143,7 +143,6 @@ function stopNavigation(){
 	svc.callService(function(res){
 		console.log("Respuesta Recibida");
 	});
-	navigation = false;
 	window.alert("Navigation process stopped. press OK.");
 	
 	}
@@ -164,7 +163,6 @@ function stopMapping(){
 	svc.callService(function(res){
 		console.log("Respuesta Recibida");
 	});
-	mapping = false;
 	window.alert("Mapping process stopped. Press OK.");
 	
 	}
@@ -219,3 +217,40 @@ function goNavigation(){
 	}
     window.location.href = "navigation.html";
 }
+
+// TOPIC SUBSCRIBERS
+var map_nav_state_sub = new ROSLIB.Topic({
+	ros : ros,
+	name : namespace + '/map_nav_manager/state',
+	messageType : 'map_nav_manager/State'
+});
+	
+// Topic handlers
+map_nav_state_sub.subscribe(function(message) {
+	mapping = message.mapping;
+	navigation = message.navigation;
+	localization = message.localization;
+	map_server = message.map_server;
+	
+	if(mapping){
+		document.getElementById("mapping_status").style.color = "Green";
+	}else{
+		document.getElementById("mapping_status").style.color = "Red";
+	}
+	if(navigation){
+		document.getElementById("navigation_status").style.color = "Green";
+	}else{
+		document.getElementById("navigation_status").style.color = "Red";
+	}
+	if(localization){
+		document.getElementById("localization_status").style.color = "Green";
+	}else{
+		document.getElementById("localization_status").style.color = "Red";
+	}
+	if(map_server){
+		document.getElementById("map_server_status").style.color = "Green";
+	}else{
+		document.getElementById("map_server_status").style.color = "Red";
+	}
+});	
+	

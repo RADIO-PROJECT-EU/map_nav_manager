@@ -50,6 +50,7 @@
 	</div>
 	<div class="column">	
 		<div class="col-lg-3 col-md-3">
+			
 			<div class="panel panel-default">
 				<div class="panel-heading">Control Panel</div>
 					<div class="panel-body">
@@ -102,66 +103,36 @@
 											</button-->
                                         </td>
                                     </tr>	
-                                    	<!--
-										<table id="ros_control_panel" class="table">
-									          <tbody>
-									            <tr valign="top">
-									              <td colspan="3"><label id="cmdVelStatusMessage"></label><br><br>
-									                              <b><label id="navInstructions"></label></b>
-									              </td>
-									             </tr>
-									             <tr>
-									               <td colspan="3" style="text-align: center;">
-														<button type="button" class="btn btn-primary btn-lg" width="100" onTouchEnd="timedStopRobot();" onTouchStart="setSpeed('forward');clearTimedStop();" onClick="setSpeed('forward');" alt="" align="middle">
-  															<span class="glyphicon glyphicon-triangle-top" aria-hidden="true"></span> <br>Adelante
-														</button>
-									                </td>
-									             </tr>
-									             <tr>
-									               <td width="33%" style="text-align: center;">
-									               	<button type="button" class="btn btn-primary btn-lg" width="100" onTouchEnd="timedStopRobot();" onTouchStart="setSpeed('left');clearTimedStop();" onClick="setSpeed('left');" alt="" align="middle">
-  														<span class="glyphicon glyphicon-triangle-left" aria-hidden="true"></span> <br>Izquierda
-													</button>
-									               </td>
-
-									               <td width="33%" style="text-align: center;">
-									               	<button type="button" class="btn btn-danger btn-lg" width="100" onClick="stopRobot('forward');" alt="" align="middle">
-  														<span class="glyphicon glyphicon-stop" aria-hidden="true"></span> <br>Parar Robot
-													</button>	
-
-									               <td width="33%" style="text-align: center;">
-									               	<button type="button" class="btn btn-primary btn-lg" width="100" onTouchEnd="timedStopRobot();" onTouchStart="setSpeed('right');clearTimedStop();" onClick="setSpeed('right');" alt="" align="middle">
-  														<span class="glyphicon glyphicon-triangle-right" aria-hidden="true"></span> <br>Derecha
-													</button>
-												</td>
-									             </tr>
-									             <tr>
-									               <td colspan="3" style="text-align: center;">
-									               	<button type="button" class="btn btn-primary btn-lg" width="100" onTouchEnd="timedStopRobot();" onTouchStart="setSpeed('backward');clearTimedStop();" onClick="setSpeed('backward');" alt="" align="middle">
-  															<span class="glyphicon glyphicon-triangle-bottom" aria-hidden="true"></span> <br>Detrás
-														</button>
-													</td>
-									             </tr>
-									             <tr>
-									               <td align="right"><span style="font-size: 14pt;">Max Linear Spd:</span></td>
-									               <td><input type="range" id="maxLinearSpeed" min="0.01" max="0.5" step="0.01" value="0.2"
-									                    onChange="writeStatusMessage('maxLinearSpeedDisplay', this.value);"
-									                    onMouseUp="setMaxLinearSpeed(this.value);" onInput="maxLinearSpeedDisplay.value=this.value;"></td>
-									               <td><span style="font-weight: bold;"><output id="maxLinearSpeedDisplay" size="4"></output></span></td>
-									             </tr>
-									             <tr>
-									               <td align="right"><span style="font-size: 14pt;">Max Angular Spd:</span></td>
-									               <td><input type="range" id="maxAngularSpeed" min="0.01" max="2.0" step="0.01" value="1.0"
-									                    onChange="writeStatusMessage('maxAngularSpeedDisplay', this.value);"
-									                    onMouseUp="setMaxAngularSpeed(this.value);" onInput="maxAngularSpeedDisplay.value=this.value;"></td>
-									               <td><span style="font-weight: bold;"><output id="maxAngularSpeedDisplay" size="4"></output></span></td>
-									             </tr>
-									           </tbody>
-									         </table>
-									     -->
                                     </tbody>
                             </table>
 					</div>
+					<div class="panel-heading">Status Panel</div>
+					<div class="panel-body">
+						 <table id="button_table" class="table">
+                                <tbody>
+                                    <tr>
+                                        <td>
+                                        	<div id="mapping_status">Mapping</div>
+										</td>
+										<td>
+                                        	<div id="navigation_status">Navigation</div>
+                                        </td>
+										
+                                    </tr>	
+                                    <tr>
+                                        <td>
+                                        	<div id="localization_status">Localization</div>
+										</td>
+										<td>
+                                        	<div id="map_server_status">Map Server</div>
+                                        </td>
+										
+                                    </tr>
+                                   
+                                    </tbody>
+                            </table>
+					</div>
+				</div>
 				</div>													
 			</div>
 		</div>

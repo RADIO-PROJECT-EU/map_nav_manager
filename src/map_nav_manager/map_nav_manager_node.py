@@ -50,8 +50,8 @@ from std_srvs.srv import *
 from map_nav_manager.srv import *
 
 
-DEFAULT_FREQ = 100.0
-MAX_FREQ = 500.0
+DEFAULT_FREQ = 10.0
+MAX_FREQ = 100.0
 
 
 # Class Template of Robotnik component for Pyhton
