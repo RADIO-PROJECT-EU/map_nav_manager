@@ -14,7 +14,7 @@ This packages was based on the package map_nav_manager from [Jose Rapado](https:
 
 **1- Copy the repository into your catkin workspace.**
 
-The web will need the model urdf of the robot you are going to visualize. To access the model you have to link the description package inside the web folder. To do it you can use the script located into the scripts folders:
+The web will need the model urdf of the robot you are going to visualize. To access the model you have to link the description package inside the web folder. All the packages needed to show the model of the robot must be included here. To do it you can use the script located into the scripts folders:
 
 ```
 > link_robot_description.sh robot_description_package
@@ -40,10 +40,16 @@ var map_topic = namespace+'/map'
 * map_topic
   * ROS topic to get the map
 
-## Startup
+## Startup (choose option 0 or option 1&2)
+**option 0- Launch everything (servers + map_nav_manager) under a namespace**
+* arg id_robot to launch the nodes under the namespace id_robot
+* launch servers.launch
+* launch map_nav_manager.launch
+```
+> roslaunch map_nav_manager map_nav_complete.launch id_robot:=namespace
+```
 
-
-**1- Launch the servers and needed nodes:**
+**option 1- Launch the servers and needed nodes:**
 
 * SimpleHttpServer on port 8001 (by default)
 * ros_bridge_websocket
@@ -55,7 +61,7 @@ var map_topic = namespace+'/map'
 ```
 
 
-**2- Launch the map_nav_manager node**
+**option 2- Launch the map_nav_manager node**
 
 It launches the node and Interactive Markers to send goals to move_base
 
