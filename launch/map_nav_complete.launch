@@ -7,7 +7,7 @@
 		<include file="$(find map_nav_manager)/launch/servers.launch"/>
 		
 		<include file="$(find map_nav_manager)/launch/map_nav_manager.launch">
-			<arg name="global_frame_id" value="summit_xl_a_map"/>
+			<arg name="global_frame_id" value="$(arg id_robot)_map"/>
 		</include>
 	</group>
 
