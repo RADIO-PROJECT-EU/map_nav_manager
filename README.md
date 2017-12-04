@@ -39,6 +39,12 @@ var map_topic = namespace+'/map'
   * Frame id used for map (global frame)
 * map_topic
   * ROS topic to get the map
+  
+**3- Be sure that the service of ros_pose_reader is being published, otherwise start it with:
+```
+> roslaunch ros_pose_reader ros_pose_reader.launch id_robot:=namespace
+```
+
 
 ## Startup (choose option 0 or option 1&2)
 **option 0- Launch everything (servers + map_nav_manager) under a namespace**
