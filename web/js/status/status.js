@@ -1528,7 +1528,6 @@ function StopRobot(){
         
 
         if(!has_camera){
-            console.log("HAY CÁMARA");
-            console.log($('#exTab1 ul li:last').hide());
+            $('#exTab1 ul li:last').hide();
         }
 	});

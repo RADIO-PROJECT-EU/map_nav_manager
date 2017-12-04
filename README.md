@@ -29,6 +29,7 @@ var hostname = 'localhost'
 var namespace = '/summit_xl_a'
 var map_frame = 'summit_xl_a_map'
 var map_topic = namespace+'/map'
+var has_camera = true/false
 ```
 
 * hostname
@@ -39,7 +40,9 @@ var map_topic = namespace+'/map'
   * Frame id used for map (global frame)
 * map_topic
   * ROS topic to get the map
-  
+* has_camera
+  * If is setted as false, the camera tab in status page is hidden
+
 **3- Be sure that the service of ros_pose_reader is being published, otherwise start it with:
 ```
 > roslaunch ros_pose_reader ros_pose_reader.launch id_robot:=namespace
