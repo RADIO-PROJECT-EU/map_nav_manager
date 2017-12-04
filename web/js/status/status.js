@@ -1524,5 +1524,11 @@ function StopRobot(){
 		
 		
 		//call to mainLoop each x ms
-		setInterval(mainLoop, 1000);
+        setInterval(mainLoop, 1000);
+        
+
+        if(!has_camera){
+            console.log("HAY CÁMARA");
+            console.log($('#exTab1 ul li:last').hide());
+        }
 	});
