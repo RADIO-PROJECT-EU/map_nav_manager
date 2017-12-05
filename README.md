@@ -5,11 +5,11 @@ A ROS node to manage processes for performing navigation and mapping from a web-
 This packages was based on the package map_nav_manager from [Jose Rapado](https://github.com/JoseRobotnik/map_nav_manager.git)
 
 
-## Dependencies
+## 1- Dependencies
 
 * Firefox navigator 
 
-## Install & configuration
+## 2- Install & configuration
 
 
 **1- Copy the repository into your catkin workspace.**
@@ -40,7 +40,7 @@ var map_topic = namespace+'/map'
 * map_topic
   * ROS topic to get the map
 
-## Startup
+## 3- Startup
 
 *Note: all the launch files (nodes) have to run under the same namespace than the robot.*
 
@@ -58,7 +58,7 @@ var map_topic = namespace+'/map'
 
 **2- Launch the map_nav_manager node**
 
-It launches the node and Interactive Markers to send goals to move_base
+It launches the node and Interactive Markers to send goals to move_base and to initialize the global pose (amcl)
 
 ```
 > roslaunch map_nav_manager map_nav_manager.launch
@@ -75,5 +75,55 @@ Arguments for the launch file:
 Example:
 
 http://localhost:8001
+
+
+## 4- Nodes
+
+### 4.1 map_nav_manager_node
+
+It is a process manager that controls the execution of external nodes involved in the mapping, localization and navigation tasks.
+
+It manages the following nodes:
+* slam_gmapping
+* move_base
+* amcl
+* map_server
+* map_saver
+
+#### parameters
+
+* desired_freq (double)
+  * control loop frequency (10 hz default)
+* navigation (dictionary)
+  * list of params to run the navigation node (see config/map_nav_manager_node.yaml for further information)
+* mapping (dictionary) 
+  * list of params to run the navigation node (see config/map_nav_manager_node.yaml for further information)
+* map_server (dictionary)
+  * list of params to run the navigation node (see config/map_nav_manager_node.yaml for further information)
+* map_saver (dictionary)
+  * list of params to run the navigation node (see config/map_nav_manager_node.yaml for further information)
+* localization (dictionary)
+  * list of params to run the navigation node (see config/map_nav_manager_node.yaml for further information)
+
+#### topics
+
+* ~state (map_nav_manager/State)
+  * current control state
+
+#### services
+
+* ~save_map (map_nav_managar/SetFilename)
+  * saves the current map with the specified name
+* ~start_localization (std_srvs/Trigger)
+* ~stop_localization (std_srvs/Trigger)
+* ~start_map_server (map_nav_managar/SetFilename)
+  * runs a map server with the specified map
+* ~stop_map_server (std_srvs/Trigger)
+* ~start_mapping (std_srvs/Trigger)
+* ~stop_mapping (std_srvs/Trigger)
+* ~start_navigation (std_srvs/Trigger)
+* ~stop_navigation (std_srvs/Trigger)
+
+
 
 
