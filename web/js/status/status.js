@@ -152,7 +152,7 @@ var drive_status_codes = [
 
 
 var ros = new ROSLIB.Ros({
-	url : 'ws://192.168.0.200:9090'
+	url : 'ws://localhost:9090'
 });
 
 
@@ -173,7 +173,13 @@ var camera_rear_ptz_publisher = new ROSLIB.Topic({
 // Subscribing to Topics
 // ----------------------
 
-	
+//Subscriber to system_monitor/diagnostics topic to set all necessary elements to his tab
+var monitorListener = new ROSLIB.Topic({
+    ros : ros,
+    name : '/system_monitor/diagnostics',
+    messageType : 'system_monitor/Diagnostic'
+});
+
 //battery topic
 var battery_subscriber = new ROSLIB.Topic({
 	ros : ros,
@@ -1318,7 +1324,261 @@ function StopRobot(){
 		document.querySelector('#brw_driver_status_words span').innerHTML = status_word_string;
 	    
 	} 
+    
+    monitorListener.subscribe(function(message){
+		clearSystemMonitorData();
+	    
+	    createCpuTemperature(message);
+            			
+		createCpuUsageTable(message);
+            
+		createMemUsageTable(message);
+           
+		createNetUsageTable(message);
+           
+		createHddUsageTable(message);    
+        });
+	
+	function clearSystemMonitorData(){
+		var myNode = document.getElementById("cpu_usage_tb");
+	    while (myNode.firstChild) {
+			myNode.removeChild(myNode.firstChild);
+	    }
+	    myNode = document.getElementById("cpu_temperature");
+	    while (myNode.firstChild) {
+			myNode.removeChild(myNode.firstChild);
+	    }
+	    myNode = document.getElementById("net_usage_tb");
+	    while (myNode.firstChild) {
+			myNode.removeChild(myNode.firstChild);
+	    }
+	    myNode = document.getElementById("hdd_usage_tb");
+	    while (myNode.firstChild) {
+			myNode.removeChild(myNode.firstChild);
+	    }
+	    myNode = document.getElementById("mem_usage_tb");
+	    while (myNode.firstChild) {
+			myNode.removeChild(myNode.firstChild);
+	    }
+	    myNode = document.getElementById("cpu_usage_ld1");
+	    while (myNode.firstChild) {
+			myNode.removeChild(myNode.firstChild);
+	    }
+	    myNode = document.getElementById("mem_total");
+	    while (myNode.firstChild) {
+			myNode.removeChild(myNode.firstChild);
+	    }
+	    myNode = document.getElementById("mem_free");
+	    while (myNode.firstChild) {
+			myNode.removeChild(myNode.firstChild);
+	    }
+	    myNode = document.getElementById("mem_used");
+	    while (myNode.firstChild) {
+			myNode.removeChild(myNode.firstChild);
+	    }
+	    myNode = document.getElementById("cpu_usage_ld5");
+	    while (myNode.firstChild) {
+			myNode.removeChild(myNode.firstChild);
+	    }
+	    myNode = document.getElementById("cpu_usage_ld15");
+	    while (myNode.firstChild) {
+			myNode.removeChild(myNode.firstChild);
+	    }
+	}
+	
+	function createCpuTemperature(message){
+		// Creating CPU Temperature fields
+		var num_cores = message.diagCpuTemp.status.cores.length;
+		for(var i =0;i< num_cores ;i++){
+			var ele = document.createElement('div');
+			var id = 'temperature_core_'+(i+1);
+			ele.setAttribute('id', id);
+			ele.innerHTML = 'Temperature (Core '+(i+1) + ') = ';
+			var span = document.createElement('span');
+			span.innerHTML = message.diagCpuTemp.status.cores[i].temp;
+			document.getElementById('cpu_temperature').appendChild(ele);
+			document.getElementById('temperature_core_'+(i+1)).appendChild(span);
+		}	
+	}
 	 
+	function createMemUsageTable(message){
+		// Creating Memory table
+        var tblBody = document.createElement('tbody');
+        var num_memories = message.diagMem.status.memories.length;
+        var keys = Object.keys(message.diagMem.status.memories[num_memories-1]);
+        keys.splice(keys.indexOf('name'),1);
+        // The first row contains the memories name
+        var row = document.createElement('tr');
+        var cell = document.createElement('td');
+        cell.setAttribute("style","width: 6em");
+        row.appendChild(cell);
+        for(var i=0;i<num_memories;i++){
+			cell = document.createElement('td');
+			cell.setAttribute("style","width: 6em");
+			var cellText = document.createTextNode(message.diagMem.status.memories[i]['name']);
+			cell.appendChild(cellText);
+			row.appendChild(cell);
+		}
+		tblBody.appendChild(row);
+		// Creating the others rows
+		for(var i=0;i<keys.length;i++){
+			row = document.createElement('tr');
+			cell = document.createElement('td');
+			var cellText = document.createTextNode(keys[i]);
+			cell.appendChild(cellText);
+			row.appendChild(cell);
+			for(var j = 0;j<num_memories;j++){
+				cell = document.createElement('td');
+				cell.setAttribute('id', 'mem_usage_'+j+'_'+keys[i]);
+				cellText = document.createTextNode(message.diagMem.status.memories[j][keys[i]]);
+				cell.appendChild(cellText);
+				row.appendChild(cell);
+			}
+			tblBody.appendChild(row);
+		}
+		document.getElementById('mem_usage_tb').appendChild(tblBody);
+		
+		var cellText = document.createTextNode("Total = " + message.diagMem.status.totalM);
+		document.getElementById('mem_total').appendChild(cellText);
+		cellText = document.createTextNode("Used = " + message.diagMem.status.usedM);
+		document.getElementById('mem_used').appendChild(cellText);
+		cellText = document.createTextNode("Free = " + message.diagMem.status.freeM);
+		document.getElementById('mem_free').appendChild(cellText);	
+	  }
+	
+	function createCpuUsageTable(message){
+		// Creating CPU Usage table
+		var tblBody = document.createElement('tbody');
+		var num_cores = message.diagCpuUsage.status.cores.length;
+		var keys = Object.keys(message.diagCpuUsage.status.cores[num_cores-1]);
+		keys.splice(keys.indexOf('id'),1);
+		// The first row contains the cores id
+		var row = document.createElement('tr');
+		var cell = document.createElement('td');
+		cell.setAttribute("style","width: 6em");
+		row.appendChild(cell);
+		for(var i=0;i<num_cores;i++){
+			cell = document.createElement('td');
+			cell.setAttribute("style","width: 6em");
+			var cellText = document.createTextNode("Core "+i);
+			cell.appendChild(cellText);
+			row.appendChild(cell);
+		}
+		tblBody.appendChild(row);
+		// Creating the others rows
+		for(var i=0;i<keys.length;i++){
+			row = document.createElement('tr');
+			cell = document.createElement('td');
+			var cellText = document.createTextNode(keys[i]);
+			cell.appendChild(cellText);
+			row.appendChild(cell);
+			for(var j = 0;j<num_cores;j++){
+				cell = document.createElement('td');
+				cell.setAttribute('id', 'cpu_usage_'+j+'_'+keys[i]);
+				if (typeof message.diagCpuUsage.status.cores[j][keys[i]] === 'number'){
+					 cellText = document.createTextNode(Math.round(message.diagCpuUsage.status.cores[j][keys[i]] * 100)/100);
+				}else{
+					 cellText = document.createTextNode(message.diagCpuUsage.status.cores[j][keys[i]]);
+				}
+				cell.appendChild(cellText);
+				row.appendChild(cell);
+			}
+			tblBody.appendChild(row);
+		}
+		document.getElementById('cpu_usage_tb').appendChild(tblBody);
+		
+		var cellText = document.createTextNode("load_avg1 = " + message.diagCpuUsage.status.load_avg1);
+		document.getElementById('cpu_usage_ld1').appendChild(cellText);
+		cellText = document.createTextNode("load_avg5 = " + message.diagCpuUsage.status.load_avg5);
+		document.getElementById('cpu_usage_ld5').appendChild(cellText);
+		cellText = document.createTextNode("load_avg15 = " + message.diagCpuUsage.status.load_avg15);
+		document.getElementById('cpu_usage_ld15').appendChild(cellText);	
+	}
+	
+	function createNetUsageTable(message){
+		// Creating Net table
+		var tblBody = document.createElement('tbody');
+		var num_interfaces = message.diagNet.status.interfaces.length;
+		var keys = Object.keys(message.diagNet.status.interfaces[num_interfaces-1]);
+		keys.splice(keys.indexOf('name'),1);
+		// The first row contains the interfaces name
+		var row = document.createElement('tr');
+		var cell = document.createElement('td');
+		cell.setAttribute("style","width: 6em");
+		row.appendChild(cell);
+		for(var i=0;i<num_interfaces;i++){
+			cell = document.createElement('td');
+			cell.setAttribute("style","width: 6em");
+			var cellText = document.createTextNode(message.diagNet.status.interfaces[i]['name']);
+			cell.appendChild(cellText);
+			row.appendChild(cell);
+		}
+		tblBody.appendChild(row);
+		// Creating the others rows
+		for(var i=0;i<keys.length;i++){
+			row = document.createElement('tr');
+			cell = document.createElement('td');
+			var cellText = document.createTextNode(keys[i]);
+			cell.appendChild(cellText);
+			row.appendChild(cell);
+			for(var j = 0;j<num_interfaces;j++){
+				cell = document.createElement('td');
+				cell.setAttribute('id', 'net_usage_'+j+'_'+keys[i]);
+				if (typeof message.diagNet.status.interfaces[j][keys[i]] === 'number'){
+					 cellText = document.createTextNode(Math.round(message.diagNet.status.interfaces[j][keys[i]] * 100)/100);
+				}else{
+					 cellText = document.createTextNode(message.diagNet.status.interfaces[j][keys[i]]);
+				}
+				cell.appendChild(cellText);
+				row.appendChild(cell);
+			}
+			tblBody.appendChild(row);
+		}
+		document.getElementById('net_usage_tb').appendChild(tblBody);	
+	}
+		
+	function createHddUsageTable(message){
+		// Creating HDD table
+		var tblBody = document.createElement('tbody');
+		var num_disks = message.diagHdd.status.disks.length;
+		var keys = Object.keys(message.diagHdd.status.disks[num_disks-1]);
+		keys.splice(keys.indexOf('name'),1);
+		// The first row contains the disks name
+		var row = document.createElement('tr');
+		var cell = document.createElement('td');
+		cell.setAttribute("style","width: 6em");
+		row.appendChild(cell);
+		for(var i=0;i<num_disks;i++){
+			cell = document.createElement('td');
+			cell.setAttribute("style","width: 6em");
+			cellText = document.createTextNode(message.diagHdd.status.disks[i]['name']);
+			cell.appendChild(cellText);
+			row.appendChild(cell);
+		}
+		tblBody.appendChild(row);
+		// Creating the others rows
+		for(var i=0;i<keys.length;i++){
+			row = document.createElement('tr');
+			cell = document.createElement('td');
+			var cellText = document.createTextNode(keys[i]);
+			cell.appendChild(cellText);
+			row.appendChild(cell);
+			for(var j = 0;j<num_disks;j++){
+				cell = document.createElement('td');
+				cell.setAttribute('id', 'hdd_usage_'+j+'_'+keys[i]);
+				if (typeof message.diagHdd.status.disks[j][keys[i]] === 'number'){
+					 cellText = document.createTextNode(Math.round(message.diagHdd.status.disks[j][keys[i]] * 100)/100);
+				}else{
+					 cellText = document.createTextNode(message.diagHdd.status.disks[j][keys[i]]);
+				}
+				cell.appendChild(cellText);
+				row.appendChild(cell);
+			}
+			tblBody.appendChild(row);
+		}
+		document.getElementById('hdd_usage_tb').appendChild(tblBody);	
+    }
+
 	//jquery init
 	$(document).ready(function() {
 		

@@ -5,6 +5,8 @@
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>Robot Status</title>
   <!-- author Robotnik 
  VERSION FOR SUMMITXL STEEL ROBOT
 -->
@@ -39,6 +41,9 @@
       <ul  class="nav nav-pills">
         <li class="active">
           <a  href="#tabs-3" data-toggle="tab">Robot Status</a>
+        </li>
+        <li>
+            <a href="#tabs-2" data-toggle="tab">System monitor</a>
         </li>
         <li>
           <a href="#tabs-1" data-toggle="tab">Camera</a>
@@ -289,6 +294,90 @@
         </div>            
       </div>
       
+      <div class="tab-pane" id="tabs-2">
+      <!-- SYSTEM MONITOR TAB-->
+	  <!---------------------->
+		  <table>
+		    <tr>
+			  <td>
+			    <h3>CPU (Usage)</h3>
+			  </td>
+			  <td>
+			    <h3>CPU (Temperature)</h3>
+			  </td>	
+			</tr>
+			<tr>
+			  <td>
+			    <table id="cpu_usage_tb">
+				</table>
+			  </td>
+			  <td style="vertical-align:top">
+				<div id="cpu_temperature">
+				</div>	
+			  </td>	
+			</tr>
+			<tr>
+			  <td>  
+			    <table>
+				  <tr>
+					<td id="cpu_usage_ld1" style="width: 10em")>
+					</td>
+					<td id="cpu_usage_ld5" style="width: 10em">
+					</td>
+					<td id="cpu_usage_ld15" style="width: 10em">	
+					</td>
+                  </tr>
+                </table>
+			  </td>
+			</tr>
+			<tr>
+			  <td>
+			    <h3>Net (Usage)</h3>
+			  </td>
+			  <td>
+			    <h3>HDD (Usage)</h3>
+			  </td>
+			</tr>
+			<tr>
+			  <td>
+			    <table id="net_usage_tb">
+				</table>
+			  </td>
+			  <td style="vertical-align:top">
+			    <table id="hdd_usage_tb">
+				</table>
+			  </td>
+			</tr>
+		  </table>			
+		  <table>
+			<tr>
+			  <td>
+			    <h3>Memory (Usage)</h3>
+			  </td>
+			</tr>
+			<tr>
+			  <td>
+			    <table id="mem_usage_tb">
+				</table>
+			  </td>
+			</tr>
+			<tr>
+			  <td>
+			    <table>
+				  <tr>
+				    <td id="mem_total" style="width: 10em")>
+					</td>
+					<td id="mem_used" style="width: 10em">
+					</td>
+					<td id="mem_free" style="width: 10em">
+					</td>
+				  </tr>
+			    </table>
+			  </td>	
+			</tr>
+		  </table>
+      </div>
+
       <div class="tab-pane" id="tabs-1">
         <div style="float:left">
           <img width="600" height="600" src="http://192.168.0.186/axis-cgi/mjpg/video.cgi?videocodec=h264&amp;streamprofile=Bandwidth">
