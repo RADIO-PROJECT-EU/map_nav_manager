@@ -1,4 +1,93 @@
 
+//jquery init
+$(document).ready(function() {
+
+	$('div#occupancygrid').width('70%');/* $( "#urdf" ).width(); */
+
+	$('div#panel').width('25%');
+
+	var anchodiv =  $('div#tabs-1').width();
+	
+	var anchonav = $('div#occupancygrid').width();
+
+	var altonav = anchonav / 1.33;
+
+	var anchopanel = anchodiv - anchonav - 1550;
+
+	$('div#tabs-1').height(altonav);
+
+	$(window).resize(function(){
+		location.reload();
+		}
+	);
+
+	//$('div#panel').width(anchopanel);
+
+
+	//$('div#tabs-1').width(ancho);
+	
+	// Create the main viewer.
+	var viewer = new ROS3D.Viewer({
+  		divID : 'occupancygrid',
+		width : anchonav,
+		height : altonav - 250,
+		antialias : true,
+		background: '#002233',
+		cameraPose : {x: 3, y: 3, z: 1}
+	});
+
+	// Add a grid.
+	viewer.addObject(new ROS3D.Grid({
+		color:'#0181c4',
+  		cellSize: 0.5,
+  		num_cells: 20
+	}));
+
+	// Setup a client to listen to TFs.
+    var tfClient = new ROSLIB.TFClient({
+      ros : ros,
+      fixedFrame : map_frame,
+      angularThres : 0.01,
+      transThres : 0.01,
+      rate : 10.0,
+      serverName: namespace+'/tf2_web_republisher',
+      repubServiceName: namespace+'/republish_tfs'
+    });
+
+    // Setup the URDF client.
+    var urdfClient = new ROS3D.UrdfClient({
+      ros : ros,
+      param: namespace+'/robot_description',
+      tfClient : tfClient,
+      rootObject: viewer.scene
+    });
+    
+    // Setup the marker client.
+    var gridClient = new ROS3D.OccupancyGridClient({
+      ros : ros,
+      rootObject : viewer.scene,
+      continuous: true,
+      topic: map_topic
+    });
+    
+    var interactiveMarkerClient = new ROS3D.InteractiveMarkerClient({
+      ros : ros,
+      camera : viewer.camera,
+      rootObject : viewer.selectableObjects,
+      tfClient : tfClient,
+      topic: namespace+'/goto_interactive_marker'
+    });
+	
+	var interactiveMarkerClient = new ROS3D.InteractiveMarkerClient({
+	  ros : ros,
+	  camera : viewer.camera,
+	  rootObject : viewer.selectableObjects,
+	  tfClient : tfClient,
+	  topic: namespace+'/init_pose_interactive_marker'
+	});
+});
+
+
 // MAP SERVER
 function startMapServer(){
 	if(mapping == true){
