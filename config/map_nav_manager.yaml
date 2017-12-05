@@ -1,30 +1,51 @@
+#
+# This config file defines how to run the different processes involved in mapping, localization and navigation tasks
+#
+# Available tags:
+# - command: system command/process to be called
+# - params: ROS params added to the command when running it
+# - args: Arguments added to the program
+# - autorun: flag to enable the autorun 
+# - process: for internal use
+# - maps_folder: path in the local system to save/load maps
+# - default_map: default name for saving/loading a map
+#
+
+
 navigation:
     command: 'roslaunch summit_xl_navigation move_base.launch'
     params: 'prefix:=summit_xl_a_'
+    args: ''
     autorun: false
     process: ''
 
 mapping: 
     command: 'roslaunch summit_xl_localization slam_gmapping.launch'
     params: 'prefix:=summit_xl_a_'
+    args: ''
     autorun: false
     process: ''
    
 map_saver: 
     command: 'rosrun map_server map_saver'
     params: ''
-    autorun: false
+    args: ''
     process: ''
     maps_folder: '/home/rnavarro/catkin_ws/src/map_nav_manager/map'
+    default_map: 'map1'
 
 map_server: 
     command: 'rosrun map_server map_server'
-    params: ''
+    params: '_frame_id:=summit_xl_a_map'
+    args: ''
     autorun: false
     process: '' 
+    maps_folder: '/home/rnavarro/catkin_ws/src/map_nav_manager/map'
+    default_map: 'map1'
 
 localization:
     command: 'roslaunch summit_xl_localization amcl.launch'
     params: 'prefix:=summit_xl_a_'
+    args: ''
     autorun: false
     process: '' 

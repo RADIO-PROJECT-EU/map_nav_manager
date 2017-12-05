@@ -11,7 +11,9 @@
     <link href="css/bootstrap.min.css" rel="stylesheet">
     <link href="css/common.css" rel="stylesheet">
     
-    <script type="text/javascript" src="js/global_config.js"></script>
+    <script src="js/jquery.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+
     <script type="text/javascript" src="js/three.js"></script>
 	<script type="text/javascript" src="js/ColladaLoader.js"></script>
 	<script type="text/javascript" src="js/STLLoader.js"></script>
@@ -23,8 +25,10 @@
 	<script type="text/javascript" src="js/roslib.js"></script>
 	<script type="text/javascript" src="js/ros2d.js"></script>
 	
+	<script type="text/javascript" src="js/global_config.js"></script>
+	<script type="text/javascript" src="js/common.js"></script>
 	<script type="text/javascript" src="js/mapping.js"></script>
-    
+	    
 
     <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -96,66 +100,50 @@
                                     <tr>
                                         <td>
                                         	<button type="button" class="btn btn-primary btn-lg" width="100" alt="" align="middle" onClick="goIndex()">
-  												<span class="glyphicon glyphicon-home" aria-hidden="true"></span> <br>Home
+  												<span class="glyphicon glyphicon-home" aria-hidden="true"></span> <br>Home    
 											</button>
-                                        	<!--button type="button" class="btn btn-primary btn-lg" width="100" alt="" align="middle" onClick="goNavigation()">
-  												<span class="glyphicon glyphicon-map-marker" aria-hidden="true"></span> <br>Navigation	
-											</button-->
+										</td>
+                                        <td>
+                                        	<button type="button" class="btn btn-primary btn-lg" width="100" alt="" align="middle" onClick="goNavigation()">
+  												<span class="glyphicon glyphicon-map-marker" aria-hidden="true"></span> <br>Loc & Nav
+											</button>
                                         </td>
                                     </tr>	
                                     </tbody>
                             </table>
 					</div>
 					<div class="panel-heading">Status Panel</div>
-					<div class="panel-body">
-						 <table id="button_table" class="table">
-                                <tbody>
-                                    <tr>
-                                        <td>
-                                        	<div id="mapping_status">Mapping</div>
-										</td>
-										<td>
-                                        	<div id="navigation_status">Navigation</div>
-                                        </td>
-										
-                                    </tr>	
-                                    <tr>
-                                        <td>
-                                        	<div id="localization_status">Localization</div>
-										</td>
-										<td>
-                                        	<div id="map_server_status">Map Server</div>
-                                        </td>
-										
-                                    </tr>
-                                   
-                                    </tbody>
-                            </table>
+						<div class="panel-body">
+							 <table id="button_table" class="table">
+									<tbody>
+										<tr>
+											<td>
+												<div id="mapping_status">Mapping</div>
+											</td>
+											<td>
+												<div id="navigation_status">Navigation</div>
+											</td>
+											
+										</tr>	
+										<tr>
+											<td>
+												<div id="localization_status">Localization</div>
+											</td>
+											<td>
+												<div id="map_server_status">Map Server</div>
+											</td>
+											
+										</tr>
+									   
+										</tbody>
+								</table>
+						</div>
 					</div>
-				</div>
 				</div>													
 			</div>
 		</div>
 
 	</div>
-
-
-    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
-    <script src="js/jquery.min.js"></script>
-    <!-- Include all compiled plugins (below), or include individual files as needed -->
-    <script src="js/bootstrap.min.js"></script>
-    <script type="text/javascript" src="js/three.js"></script>
-	<script type="text/javascript" src="js/ColladaLoader.js"></script>
-	<script type="text/javascript" src="js/STLLoader.js"></script>
-	<script type="text/javascript" src="js/ColladaLoader2.js"></script>
-	<script type="text/javascript" src="js/eventemitter2.min.js"></script>
-	<script type="text/javascript" src="js/easeljs.min.js"></script>
-	<script type="text/javascript" src="js/ros3d.js"></script>
-	<script type="text/javascript" src="js/nav2d.js"></script>
-	<script type="text/javascript" src="js/roslib.js"></script>
-	<script type="text/javascript" src="js/ros2d.js"></script>
-	
-	<script type="text/javascript" src="js/mapping.js"></script>
     
   </body>
 </html>

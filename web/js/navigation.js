@@ -1,118 +1,29 @@
-var ros = new ROSLIB.Ros({
-     url : 'ws://'+hostname+':9090'
-});
 
-var navigation = false
-
-$(window).resize(function(){
-	location.reload();
-	}
-);
-
-//jquery init
-$(document).ready(function() {
-
-	$('div#nav').width('70%');/* $( "#urdf" ).width(); */
-
-	$('div#panel').width('25%');
-
-	var anchodiv =  $('div#tabs-1').width();
-
-	var anchonav = $("#nav").width();
-
-	var altonav = anchonav / 1.33;
-
-	var anchopanel = anchodiv - anchonav - 1550;
-
-	$('div#tabs-1').height(altonav);
-
-	//$('div#panel').width(anchopanel);
-
-
-	//$('div#tabs-1').width(ancho);
-
-	// Create the main viewer.
-	var viewer = new ROS2D.Viewer({
-	  divID : 'nav',
-	  width : anchonav,
-	  height : altonav - 250,			
-	});
-	// Setup the nav client.
-	var navGridClient = new NAV2D.OccupancyGridClientNav({
-	ros : ros,
-	rootObject : viewer.scene,
-	viewer : viewer,
-	withOrientation: true,
-	serverName : '/move_base'
-    });
-	
-});
-
-function startNavigation(){
-
-	if(navigation == true){
-		window.alert("Error: Nodos AMCL y move_base iniciados");
-	}else{
-	var svc = new ROSLIB.Service({  
-		ros : ros,
-		name : '/map_nav_manager/start_navigation_srv',
-		messageType : 'std_srv/Trigger'
-	});
-
-	svc.callService(function(res){
-		console.log("Respuesta Recibida");
-	});	
-	navigation = true;
-	window.alert("Nodos AMCL y move_base se han iniciado. Presione OK.");
-	
+// MAP SERVER
+function startMapServer(){
+	if(mapping == true){
+		window.alert("Error. Mapping has to be off before running a map server");
+		return;
 	}
 
-}
+	if(map_server==true){
 
-function stopNavigation(){
-
-	if(navigation == false){
-		window.alert("Error: Nodos AMCL y move_base no iniciados");
-	}else{
-	var svc = new ROSLIB.Service({  
-		ros : ros,
-		name : '/map_nav_manager/stop_navigation_srv',
-		messageType : 'std_srv/Trigger'
-	});
-
-	var data = new ROSLIB.ServiceRequest({
-		value : ''
-	});
-
-	svc.callService(function(res){
-		console.log("Respuesta Recibida");
-	});
-	navigation = false;
-	window.alert("Nodos AMCL y move_base se han parado. Presione OK.");
-	
-	}
-}
-
-function loadMap(){
-
-	if(navigation==true){
-
-		window.alert("Error. Nodos AMCL y move_base se han iniciado");
+		window.alert("Map server already running");
 
 	}else{
 
 		var file_name = $('#filename').val();
 
 		if(file_name == ''){
-			window.alert("Error. Escriba un nombre de archivo.");
+			window.alert("startMapServer: loading default map");
 		}else{
 
 			console.log(file_name);
 			
 			var svc = new ROSLIB.Service({  
 				ros : ros,
-				name : '/map_nav_manager/load_map_srv',
-				messageType : 'std_srv/Trigger'
+				name : namespace + '/map_nav_manager/start_map_server',
+				messageType : 'map_nav_manager/SetFilename'
 			});
 
 			var data = new ROSLIB.ServiceRequest({
@@ -120,25 +31,101 @@ function loadMap(){
 			});
 
 			svc.callService(data,function(res){
-				console.log("Respuesta Recibida");
+				console.log("startMapServer: Response received");
 			});	
 
-			window.alert("El mapa se ha cargado con \u00e9xito.");
+			window.alert("startMapServer: request successfully sent.");
 		}
 	}
 
 }
 
-function goIndex(){
-	if(navigation==true){
-		stopNavigation();
+function stopMapServer(){
+	if(map_server==true){
+		var svc = new ROSLIB.Service({  
+				ros : ros,
+				name : namespace + '/map_nav_manager/stop_map_server',
+				messageType : 'std_srv/Trigger'
+		});
+
+		var data = new ROSLIB.ServiceRequest({
+			
+		});
+		svc.callService(data,function(res){
+			console.log("stopMapServer: Response received");
+		});	
+		window.alert("Stopping Map Server");
+
+	}else{
+		window.alert("Map Server not running");
+
 	}
+}
+
+// LOCALIZATION
+function startLocalization(){
+	if(mapping == true){
+		window.alert("Error. Mapping has to be off before running localization node");
+		return;
+	}
+
+	if(map_server == false){
+		window.alert("Localization node needs a map server");
+	}
+	
+	if(localization==true){
+
+		window.alert("Localization already running");
+
+	}else{
+	
+		var svc = new ROSLIB.Service({  
+			ros : ros,
+			name : namespace + '/map_nav_manager/start_localization',
+			messageType : 'std_srv/Trigger'
+		});
+
+		var data = new ROSLIB.ServiceRequest({
+		});
+
+		svc.callService(data,function(res){
+			console.log("startLocalization: Response received");
+		});	
+
+		window.alert("startLocalization: request successfully sent.");
+		
+	}
+
+}
+
+function stopLocalization(){
+	
+	if(localization==true){
+		
+		var svc = new ROSLIB.Service({  
+				ros : ros,
+				name : namespace + '/map_nav_manager/stop_localization',
+				messageType : 'std_srv/Trigger'
+		});
+
+		var data = new ROSLIB.ServiceRequest({
+			
+		});
+		svc.callService(data,function(res){
+			console.log("stopLocalization: Response received");
+		});	
+		window.alert("Stopping Localization node");
+
+	}else{
+		window.alert("Localization node is not running");
+
+	}
+}
+
+function goIndex(){
     window.location.href = "index.html";
 }
 
 function goMapping(){
-	if(navigation==true){
-		stopNavigation();
-	}
     window.location.href = "mapping.html";
 }

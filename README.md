@@ -42,6 +42,7 @@ var map_topic = namespace+'/map'
 
 ## Startup
 
+*Note: all the launch files (nodes) have to run under the same namespace than the robot.*
 
 **1- Launch the servers and needed nodes:**
 
