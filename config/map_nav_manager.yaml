@@ -1,6 +1,6 @@
 localization:
   args: ''
-  autorun: false
+  autorun: true
   command: roslaunch summit_xl_localization amcl.launch
   params: prefix:=summit_xl_a_
   process: ''
@@ -13,7 +13,7 @@ map_saver:
   process: ''
 map_server:
   args: ''
-  autorun: false
+  autorun: true
   command: rosrun map_server map_server
   default_map: mapa13
   maps_folder: /home/rnavarro/catkin_ws/src/map_nav_manager/map
@@ -27,7 +27,7 @@ mapping:
   process: ''
 navigation:
   args: ''
-  autorun: false
+  autorun: true
   command: roslaunch summit_xl_navigation move_base.launch
   params: prefix:=summit_xl_a_
   process: ''

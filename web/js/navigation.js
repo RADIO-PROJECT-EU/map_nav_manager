@@ -75,16 +75,9 @@ $(document).ready(function() {
       camera : viewer.camera,
       rootObject : viewer.selectableObjects,
       tfClient : tfClient,
-      topic: namespace+'/goto_interactive_marker'
+      topic: namespace+'/map_nav_manager_interactive_marker'
     });
 	
-	var interactiveMarkerClient = new ROS3D.InteractiveMarkerClient({
-	  ros : ros,
-	  camera : viewer.camera,
-	  rootObject : viewer.selectableObjects,
-	  tfClient : tfClient,
-	  topic: namespace+'/init_pose_interactive_marker'
-	});
 });
 
 

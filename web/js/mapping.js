@@ -75,7 +75,7 @@ $(document).ready(function() {
       camera : viewer.camera,
       rootObject : viewer.selectableObjects,
       tfClient : tfClient,
-      topic: namespace+'/goto_interactive_marker'
+      topic: namespace+'/map_nav_manager_interactive_marker'
     });
 
 });

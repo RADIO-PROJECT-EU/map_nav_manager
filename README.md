@@ -56,7 +56,7 @@ var map_topic = namespace+'/map'
 ```
 
 
-**2- Launch the map_nav_manager node**
+**2- Launch the map_nav_manager node and markers**
 
 It launches the node and Interactive Markers to send goals to move_base and to initialize the global pose (amcl)
 
@@ -138,5 +138,17 @@ It manages the following nodes:
 * ~stop_navigation (std_srvs/Trigger)
 
 
+### 4.2 map_nav_manager_interactive_marker
 
+Interactive marker to send goals to move_base and initialize the pose of the robot
+
+**GoTo**
+
+Move the marker to the desired pose and press the 'Go' option.
+
+To cancel the command press the 'Stop' option.
+
+**Init pose**
+
+Move the marker to the desired pose and press the 'Init Pose' option.
 
