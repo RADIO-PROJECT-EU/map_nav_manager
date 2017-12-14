@@ -63,22 +63,69 @@ map_nav_state_sub.subscribe(function(message) {
 	
 	if(mapping){
 		document.getElementById("mapping_status").style.color = "Green";
+		
+		try{
+			document.getElementById("button_save_map").disabled = false;
+			document.getElementById("button_start_mapping").disabled = true;
+			document.getElementById("button_stop_mapping").disabled = false;
+		}catch(e){
+			
+		}
 	}else{
 		document.getElementById("mapping_status").style.color = "Red";
+		try{
+			document.getElementById("button_save_map").disabled = true;
+			document.getElementById("button_start_mapping").disabled = false;
+			document.getElementById("button_stop_mapping").disabled = true;
+		}catch(e){
+			
+		}
 	}
 	if(navigation){
 		document.getElementById("navigation_status").style.color = "Green";
+		document.getElementById("button_start_navigation").disabled = true;
+		document.getElementById("button_stop_navigation").disabled = false;
 	}else{
 		document.getElementById("navigation_status").style.color = "Red";
+		document.getElementById("button_start_navigation").disabled = false;
+		document.getElementById("button_stop_navigation").disabled = true;
 	}
 	if(localization){
 		document.getElementById("localization_status").style.color = "Green";
+		try{
+			document.getElementById("button_start_localization").disabled = true;
+			document.getElementById("button_stop_localization").disabled = false;
+		}catch(e){
+			
+		}
+		
 	}else{
 		document.getElementById("localization_status").style.color = "Red";
+		try{
+			document.getElementById("button_start_localization").disabled = false;
+			document.getElementById("button_stop_localization").disabled = true;
+		}catch(e){
+			
+		}
+		
 	}
 	if(map_server){
 		document.getElementById("map_server_status").style.color = "Green";
+		try{
+			document.getElementById("button_start_map_server").disabled = true;
+			document.getElementById("button_stop_map_server").disabled = false;
+		}catch(e){
+			
+		}
+		
 	}else{
 		document.getElementById("map_server_status").style.color = "Red";
+		try{
+			document.getElementById("button_start_map_server").disabled = false;
+			document.getElementById("button_stop_map_server").disabled = true;
+		}catch(e){
+			
+		}
 	}
+	
 });	

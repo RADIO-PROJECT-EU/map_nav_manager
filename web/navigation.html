@@ -63,40 +63,60 @@
                                     	 	<label for="text">Map name: </label>
                                     	 	<input type="text" id="filename"/>
                                     	 </td>
+                                    	<td>
+                                    	 	<div class="form-check">
+												<label class="form-check-label">
+												  <input type="checkbox" class="form-check-input" id="checkbox_map_default">
+												  Use this map by default
+												</label>
+											 </div>
+                                    	 </td>
                                     </tr>	
                                     <tr> 
                                     	<td>
-                                        	<button type="button" class="btn btn-success btn-lg" width="100" alt="" align="middle" onClick="startMapServer()">
+                                        	<button type="button" class="btn btn-success btn-lg" width="100" alt="" align="middle" onClick="startMapServer()" id="button_start_map_server">
   												<span class="glyphicon glyphicon-play" aria-hidden="true"></span> <br>Start Map Server	
 											</button>
 										</td> 
 										<td>
-                                        	<button type="button" class="btn btn-danger btn-lg" width="100" alt="" align="middle" onClick="stopMapServer()">
+                                        	<button type="button" class="btn btn-danger btn-lg" width="100" alt="" align="middle" onClick="stopMapServer()" id="button_stop_map_server">
   												<span class="glyphicon glyphicon-stop" aria-hidden="true"></span> <br>Stop Map Server	
 											</button>
 										</td> 
                                     </tr>
                                     <tr>
                                     	 <td>
-                                    	 	<button type="button" class="btn btn-success btn-lg" width="100" alt="" align="middle" onClick="startLocalization()">
+                                    	 	<button type="button" class="btn btn-success btn-lg" width="100" alt="" align="middle" onClick="startLocalization()" id="button_start_localization">
   												<span class="glyphicon glyphicon-play" aria-hidden="true"></span> <br>Start Localization	
 											</button>
                                     	 </td>
                                     	  <td>
-                                        	<button type="button" class="btn btn-danger btn-lg" width="100" alt="" align="middle" onClick="stopLocalization()">
+                                        	<button type="button" class="btn btn-danger btn-lg" width="100" alt="" align="middle" onClick="stopLocalization()" id="button_stop_localization">
   												<span class="glyphicon glyphicon-stop" aria-hidden="true"></span> <br>Stop Localization	
 											</button>
                                         </td>
 									</tr>
 									<tr>
                                     	 <td>
-                                    	 	<button type="button" class="btn btn-success btn-lg" width="100" alt="" align="middle" onClick="startNavigation()">
+                                    	 	<button type="button" class="btn btn-success btn-lg" width="100" alt="" align="middle" onClick="startNavigation()" id="button_start_navigation">
   												<span class="glyphicon glyphicon-play" aria-hidden="true"></span> <br>Start Navigation	
 											</button>
                                     	 </td>
                                     	  <td>
-                                        	<button type="button" class="btn btn-danger btn-lg" width="100" alt="" align="middle" onClick="stopNavigation()">
+                                        	<button type="button" class="btn btn-danger btn-lg" width="100" alt="" align="middle" onClick="stopNavigation()" id="button_stop_navigation">
   												<span class="glyphicon glyphicon-stop" aria-hidden="true"></span> <br>Stop Navigation	
+											</button>
+                                        </td>
+									</tr>
+									<tr>
+                                    	 <td>
+                                    	 	<button type="button" class="btn btn-success btn-lg" width="100" alt="" align="middle" onClick="enableLocalizationAutorun()" id="button_enable_localization_autorun">
+  												<span class="glyphicon glyphicon-play" aria-hidden="true"></span> <br>Enable Autorun	
+											</button>
+                                    	 </td>
+                                    	  <td>
+                                        	<button type="button" class="btn btn-danger btn-lg" width="100" alt="" align="middle" onClick="disableLocalizationAutorun()" id="button_disable_localization_autorun">
+  												<span class="glyphicon glyphicon-stop" aria-hidden="true"></span> <br>Disable Autorun	
 											</button>
                                         </td>
 									</tr>

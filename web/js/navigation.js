@@ -102,29 +102,31 @@ function startMapServer(){
 	}else{
 
 		var file_name = $('#filename').val();
+		var checkbox_default = $('#checkbox_map_default').is(":checked");
 
 		if(file_name == ''){
 			window.alert("startMapServer: loading default map");
-		}else{
-
-			console.log(file_name);
-			
-			var svc = new ROSLIB.Service({  
-				ros : ros,
-				name : namespace + '/map_nav_manager/start_map_server',
-				messageType : 'map_nav_manager/SetFilename'
-			});
-
-			var data = new ROSLIB.ServiceRequest({
-				name : file_name
-			});
-
-			svc.callService(data,function(res){
-				console.log("startMapServer: Response received");
-			});	
-
-			window.alert("startMapServer: request successfully sent.");
 		}
+
+		console.log(file_name);
+		
+		var svc = new ROSLIB.Service({  
+			ros : ros,
+			name : namespace + '/map_nav_manager/start_map_server',
+			messageType : 'map_nav_manager/SetFilename'
+		});
+
+		var data = new ROSLIB.ServiceRequest({
+			name : file_name,
+			use_it_by_default: checkbox_default
+		});
+
+		svc.callService(data,function(res){
+			console.log("startMapServer: Response received");
+		});	
+
+		window.alert("startMapServer: request successfully sent.");
+		
 	}
 
 }
@@ -209,6 +211,48 @@ function stopLocalization(){
 		window.alert("Localization node is not running");
 
 	}
+}
+
+
+// Disables the autorun of all the loc & nav components
+function disableLocalizationAutorun(){
+	
+	
+	var svc = new ROSLIB.Service({  
+		ros : ros,
+		name : namespace + '/map_nav_manager/autorun_loc_and_nav',
+		messageType : 'std_srv/SetBool'
+	});
+
+	var data = new ROSLIB.ServiceRequest({
+		data: false
+	});
+
+	svc.callService(data,function(res){
+		console.log("disableLocalizationAutorun: Response received");
+		window.alert("autorun disabled!");
+	});	
+
+	
+}
+
+// Enables the autorun of all the loc & nav components
+function enableLocalizationAutorun(){
+	var svc = new ROSLIB.Service({  
+		ros : ros,
+		name : namespace + '/map_nav_manager/autorun_loc_and_nav',
+		messageType : 'std_srv/SetBool'
+	});
+
+	var data = new ROSLIB.ServiceRequest({
+		data: true
+	});
+
+	svc.callService(data,function(res){
+		console.log("enableLocalizationAutorun: Response received");
+		window.alert("autorun enabled!");
+	});	
+	
 }
 
 function goIndex(){

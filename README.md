@@ -95,15 +95,28 @@ It manages the following nodes:
 * desired_freq (double)
   * control loop frequency (10 hz default)
 * navigation (dictionary)
-  * list of params to run the navigation node (see config/map_nav_manager_node.yaml for further information)
+  * list of params to run the navigation node (see subparams for further information)
 * mapping (dictionary) 
-  * list of params to run the navigation node (see config/map_nav_manager_node.yaml for further information)
+  * list of params to run the navigation node (see subparams for further information)
 * map_server (dictionary)
-  * list of params to run the navigation node (see config/map_nav_manager_node.yaml for further information)
+  * list of params to run the navigation node (see subparams for further information)
 * map_saver (dictionary)
-  * list of params to run the navigation node (see config/map_nav_manager_node.yaml for further information)
+  * list of params to run the navigation node (see subparams for further information)
 * localization (dictionary)
-  * list of params to run the navigation node (see config/map_nav_manager_node.yaml for further information)
+  * list of params to run the navigation node (see subparams for further information)
+* config_params_file (string)
+  * filename inside config folder to save/read the rosparams 
+
+
+##### Subparameters
+
+* command: system command/process to be called
+* params: ROS params added to the command when running it
+* args: Arguments added to the program
+* autorun: flag to enable the autorun 
+* maps_folder: path in the local system to save/load maps
+* default_map: default name for saving/loading a map
+
 
 #### topics
 

@@ -62,12 +62,12 @@
                                 <tbody>
                                     <tr>
                                         <td>
-                                        	<button type="button" class="btn btn-success btn-lg" width="" alt="" align="middle" onClick="startMapping()">
+                                        	<button type="button" class="btn btn-success btn-lg" width="" alt="" align="middle" onClick="startMapping()" id="button_start_mapping">
   												<span class="glyphicon glyphicon-play" aria-hidden="true"></span> <br>Start mapping	
 											</button>
 										</td>
 										<td>
-                                        	<button type="button" class="btn btn-danger btn-lg" width="" alt="" align="middle" onClick="stopMapping()">
+                                        	<button type="button" class="btn btn-danger btn-lg" width="" alt="" align="middle" onClick="stopMapping()" id="button_stop_mapping">
   												<span class="glyphicon glyphicon-stop" aria-hidden="true"></span> <br>Stop mapping	
 											</button>
                                         </td>
@@ -77,21 +77,27 @@
                                     	 <td>
                                     	 	<label for="text">Map name: </label>
                                     	 	<input type="text" id="filename"/>
+                                    	 	<div class="form-check">
+												<label class="form-check-label">
+												  <input type="checkbox" class="form-check-input" id="checkbox_map_default">
+												  Use this map by default
+												</label>
+											  </div>
                                     	 </td>
                                     	 <td>
-                                    	 	<button type="button" class="btn btn-warning btn-lg" width="" alt="" align="middle" onClick="saveMap()">
+                                    	 	<button type="button" class="btn btn-warning btn-lg" width="" alt="" align="middle" onClick="saveMap()" id="button_save_map">
   												<span class="glyphicon glyphicon-save" aria-hidden="true"></span> <br>Save map	
 											</button>
                                     	 </td>
                                     </tr>
 									<tr>
                                         <td>
-                                        	<button type="button" class="btn btn-success btn-lg" width="" alt="" align="middle" onClick="startNavigation()">
+                                        	<button type="button" class="btn btn-success btn-lg" width="" alt="" align="middle" onClick="startNavigation()" id="button_start_navigation">
   												<span class="glyphicon glyphicon-play" aria-hidden="true"></span> <br>Start navigation	
 											</button>
 										</td>
 										<td>
-                                        	<button type="button" class="btn btn-danger btn-lg" width="" alt="" align="middle" onClick="stopNavigation()">
+                                        	<button type="button" class="btn btn-danger btn-lg" width="" alt="" align="middle" onClick="stopNavigation()" id="button_stop_navigation">
   												<span class="glyphicon glyphicon-stop" aria-hidden="true"></span> <br>Stop navigation	
 											</button>
                                         </td>
@@ -99,7 +105,7 @@
                                     </tr>	
                                     <tr>
                                         <td>
-                                        	<button type="button" class="btn btn-primary btn-lg" width="100" alt="" align="middle" onClick="goIndex()">
+                                        	<button type="button" class="btn btn-primary btn-lg" width="100" alt="" align="middle" onClick="goIndex()" >
   												<span class="glyphicon glyphicon-home" aria-hidden="true"></span> <br>Home    
 											</button>
 										</td>

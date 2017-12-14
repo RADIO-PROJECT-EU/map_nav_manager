@@ -82,20 +82,24 @@ $(document).ready(function() {
 
 
 function startMapping(){
-
+	
+	if(map_server == true){
+		window.alert("Error. map_server has to be switched off before running a mapping");
+		return;
+	}
 	if(mapping == true){
 		window.alert("Error: mapping already running");
 	}else{
-	var svc = new ROSLIB.Service({  
-		ros : ros,
-		name : namespace+'/map_nav_manager/start_mapping',
-		messageType : 'std_srv/Trigger'
-	});
+		var svc = new ROSLIB.Service({  
+			ros : ros,
+			name : namespace+'/map_nav_manager/start_mapping',
+			messageType : 'std_srv/Trigger'
+		});
 
-	svc.callService(function(res){
-		console.log("Response received");
-	});	
-	window.alert("Mapping process initiated. Press OK.");
+		svc.callService(function(res){
+			console.log("Response received");
+		});	
+		window.alert("Mapping process initiated. Press OK.");
 	
 	}
 
@@ -128,17 +132,21 @@ function saveMap(){
 
 	if(mapping==false){
 
-		window.alert("Error. Nodo SLAM-Gmapping no iniciado");
+		window.alert("Error. Node SLAM-Gmapping not initiated");
 
 	}else{
 
 		var file_name = $('#filename').val();
+		var checkbox_default = $('#checkbox_map_default').is(":checked");
+		//console.log("checbox = %d",checkbox_default);
+		//console.log(checkbox_default);
+
 
 		if(file_name == ''){
 			window.alert("Error. Escriba un nombre de archivo.");
 		}else{
 
-			console.log(file_name);
+			console.log("map name = %s, save as default = %d",file_name, checkbox_default);
 			
 			var svc = new ROSLIB.Service({  
 				ros : ros,
@@ -147,7 +155,8 @@ function saveMap(){
 			});
 
 			var data = new ROSLIB.ServiceRequest({
-				name : file_name
+				name : file_name,
+				use_it_by_default: checkbox_default
 			});
 
 			svc.callService(data,function(res){
