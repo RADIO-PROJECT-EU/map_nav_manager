@@ -60,7 +60,7 @@ var has_camera = true/false
 
 **option 1- Launch the servers and needed nodes:**
 
-* SimpleHttpServer on port 8001 (by default)
+* SimpleHttpServer on port 9001 (by default)
 * ros_bridge_websocket
 * tf2_web_republisher
 * robot_pose_publisher
@@ -88,6 +88,6 @@ Arguments for the launch file:
 
 Example:
 
-http://localhost:8001
+http://localhost:9001
 
 

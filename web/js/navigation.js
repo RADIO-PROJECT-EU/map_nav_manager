@@ -1,144 +1,263 @@
-var ros = new ROSLIB.Ros({
-     url : 'ws://'+hostname+':9090'
-});
-
-var navigation = false
-
-$(window).resize(function(){
-	location.reload();
-	}
-);
-
 //jquery init
 $(document).ready(function() {
-
-	$('div#nav').width('70%');/* $( "#urdf" ).width(); */
-
-	$('div#panel').width('25%');
-
-	var anchodiv =  $('div#tabs-1').width();
-
-	var anchonav = $("#nav").width();
-
-	var altonav = anchonav / 1.33;
-
-	var anchopanel = anchodiv - anchonav - 1550;
-
-	$('div#tabs-1').height(altonav);
-
-	//$('div#panel').width(anchopanel);
-
-
-	//$('div#tabs-1').width(ancho);
-
-	// Create the main viewer.
-	var viewer = new ROS2D.Viewer({
-	  divID : 'nav',
-	  width : anchonav,
-	  height : altonav - 250,			
-	});
-	// Setup the nav client.
-	var navGridClient = new NAV2D.OccupancyGridClientNav({
-	ros : ros,
-	rootObject : viewer.scene,
-	viewer : viewer,
-	withOrientation: true,
-	serverName : '/move_base'
-    });
 	
-});
-
-function startNavigation(){
-
-	if(navigation == true){
-		window.alert("Error: Nodos AMCL y move_base iniciados");
-	}else{
-	var svc = new ROSLIB.Service({  
-		ros : ros,
-		name : '/map_nav_manager/start_navigation_srv',
-		messageType : 'std_srv/Trigger'
-	});
-
-	svc.callService(function(res){
-		console.log("Respuesta Recibida");
-	});	
-	navigation = true;
-	window.alert("Nodos AMCL y move_base se han iniciado. Presione OK.");
+		$('div#occupancygrid').width('70%');/* $( "#urdf" ).width(); */
 	
-	}
-
-}
-
-function stopNavigation(){
-
-	if(navigation == false){
-		window.alert("Error: Nodos AMCL y move_base no iniciados");
-	}else{
-	var svc = new ROSLIB.Service({  
-		ros : ros,
-		name : '/map_nav_manager/stop_navigation_srv',
-		messageType : 'std_srv/Trigger'
-	});
-
-	var data = new ROSLIB.ServiceRequest({
-		value : ''
-	});
-
-	svc.callService(function(res){
-		console.log("Respuesta Recibida");
-	});
-	navigation = false;
-	window.alert("Nodos AMCL y move_base se han parado. Presione OK.");
+		$('div#panel').width('25%');
 	
-	}
-}
-
-function loadMap(){
-
-	if(navigation==true){
-
-		window.alert("Error. Nodos AMCL y move_base se han iniciado");
-
-	}else{
-
-		var file_name = $('#filename').val();
-
-		if(file_name == ''){
-			window.alert("Error. Escriba un nombre de archivo.");
+		var anchodiv =  $('div#tabs-1').width();
+		
+		var anchonav = $('div#occupancygrid').width();
+	
+		var altonav = anchonav / 1.33;
+	
+		var anchopanel = anchodiv - anchonav - 1550;
+	
+		$('div#tabs-1').height(altonav);
+	
+		$(window).resize(function(){
+			location.reload();
+			}
+		);
+	
+		//$('div#panel').width(anchopanel);
+	
+	
+		//$('div#tabs-1').width(ancho);
+		
+		// Create the main viewer.
+		var viewer = new ROS3D.Viewer({
+			  divID : 'occupancygrid',
+			width : anchonav,
+			height : altonav - 250,
+			antialias : true,
+			background: '#002233',
+			cameraPose : {x: 3, y: 3, z: 1}
+		});
+	
+		// Add a grid.
+		viewer.addObject(new ROS3D.Grid({
+			color:'#0181c4',
+			  cellSize: 0.5,
+			  num_cells: 20
+		}));
+	
+		// Setup a client to listen to TFs.
+		var tfClient = new ROSLIB.TFClient({
+		  ros : ros,
+		  fixedFrame : map_frame,
+		  angularThres : 0.01,
+		  transThres : 0.01,
+		  rate : 10.0,
+		  serverName: namespace+'/tf2_web_republisher',
+		  repubServiceName: namespace+'/republish_tfs'
+		});
+	
+		// Setup the URDF client.
+		var urdfClient = new ROS3D.UrdfClient({
+		  ros : ros,
+		  param: namespace+'/robot_description',
+		  tfClient : tfClient,
+		  rootObject: viewer.scene
+		});
+		
+		// Setup the marker client.
+		var gridClient = new ROS3D.OccupancyGridClient({
+		  ros : ros,
+		  rootObject : viewer.scene,
+		  continuous: true,
+		  topic: map_topic
+		});
+		
+		var interactiveMarkerClient = new ROS3D.InteractiveMarkerClient({
+		  ros : ros,
+		  camera : viewer.camera,
+		  rootObject : viewer.selectableObjects,
+		  tfClient : tfClient,
+		  topic: namespace+'/map_nav_manager_interactive_marker'
+		});
+		
+		var poiInteractiveMarkerClient = new ROS3D.InteractiveMarkerClient({
+			ros : ros,
+			camera : viewer.camera,
+			rootObject : viewer.selectableObjects,
+			tfClient : tfClient,
+			topic: namespace+'/poi_interactive_marker'
+		  });
+	});
+	
+	
+	// MAP SERVER
+	function startMapServer(){
+		if(mapping == true){
+			window.alert("Error. Mapping has to be off before running a map server");
+			return;
+		}
+	
+		if(map_server==true){
+	
+			window.alert("Map server already running");
+	
 		}else{
-
+	
+			var file_name = $('#filename').val();
+			var checkbox_default = $('#checkbox_map_default').is(":checked");
+	
+			if(file_name == ''){
+				window.alert("startMapServer: loading default map");
+			}
+	
 			console.log(file_name);
 			
 			var svc = new ROSLIB.Service({  
 				ros : ros,
-				name : '/map_nav_manager/load_map_srv',
-				messageType : 'std_srv/Trigger'
+				name : namespace + '/map_nav_manager/start_map_server',
+				messageType : 'map_nav_manager/SetFilename'
 			});
-
+	
 			var data = new ROSLIB.ServiceRequest({
-				name : file_name
+				name : file_name,
+				use_it_by_default: checkbox_default
 			});
-
+	
 			svc.callService(data,function(res){
-				console.log("Respuesta Recibida");
+				console.log("startMapServer: Response received");
 			});	
-
-			window.alert("El mapa se ha cargado con \u00e9xito.");
+	
+			window.alert("startMapServer: request successfully sent.");
+			
+		}
+	
+	}
+	
+	function stopMapServer(){
+		if(map_server==true){
+			var svc = new ROSLIB.Service({  
+					ros : ros,
+					name : namespace + '/map_nav_manager/stop_map_server',
+					messageType : 'std_srv/Trigger'
+			});
+	
+			var data = new ROSLIB.ServiceRequest({
+				
+			});
+			svc.callService(data,function(res){
+				console.log("stopMapServer: Response received");
+			});	
+			window.alert("Stopping Map Server");
+	
+		}else{
+			window.alert("Map Server not running");
+	
 		}
 	}
-
-}
-
-function goIndex(){
-	if(navigation==true){
-		stopNavigation();
+	
+	// LOCALIZATION
+	function startLocalization(){
+		if(mapping == true){
+			window.alert("Error. Mapping has to be off before running localization node");
+			return;
+		}
+	
+		if(map_server == false){
+			window.alert("Localization node needs a map server");
+		}
+		
+		if(localization==true){
+	
+			window.alert("Localization already running");
+	
+		}else{
+		
+			var svc = new ROSLIB.Service({  
+				ros : ros,
+				name : namespace + '/map_nav_manager/start_localization',
+				messageType : 'std_srv/Trigger'
+			});
+	
+			var data = new ROSLIB.ServiceRequest({
+			});
+	
+			svc.callService(data,function(res){
+				console.log("startLocalization: Response received");
+			});	
+	
+			window.alert("startLocalization: request successfully sent.");
+			
+		}
+	
 	}
-    window.location.href = "index.html";
-}
-
-function goMapping(){
-	if(navigation==true){
-		stopNavigation();
+	
+	function stopLocalization(){
+		
+		if(localization==true){
+			
+			var svc = new ROSLIB.Service({  
+					ros : ros,
+					name : namespace + '/map_nav_manager/stop_localization',
+					messageType : 'std_srv/Trigger'
+			});
+	
+			var data = new ROSLIB.ServiceRequest({
+				
+			});
+			svc.callService(data,function(res){
+				console.log("stopLocalization: Response received");
+			});	
+			window.alert("Stopping Localization node");
+	
+		}else{
+			window.alert("Localization node is not running");
+	
+		}
 	}
-    window.location.href = "mapping.html";
-}
+	
+	
+	// Disables the autorun of all the loc & nav components
+	function disableLocalizationAutorun(){
+		
+		
+		var svc = new ROSLIB.Service({  
+			ros : ros,
+			name : namespace + '/map_nav_manager/autorun_loc_and_nav',
+			messageType : 'std_srv/SetBool'
+		});
+	
+		var data = new ROSLIB.ServiceRequest({
+			data: false
+		});
+	
+		svc.callService(data,function(res){
+			console.log("disableLocalizationAutorun: Response received");
+			window.alert("autorun disabled!");
+		});	
+	
+		
+	}
+	
+	// Enables the autorun of all the loc & nav components
+	function enableLocalizationAutorun(){
+		var svc = new ROSLIB.Service({  
+			ros : ros,
+			name : namespace + '/map_nav_manager/autorun_loc_and_nav',
+			messageType : 'std_srv/SetBool'
+		});
+	
+		var data = new ROSLIB.ServiceRequest({
+			data: true
+		});
+	
+		svc.callService(data,function(res){
+			console.log("enableLocalizationAutorun: Response received");
+			window.alert("autorun enabled!");
+		});	
+		
+	}
+	
+	function goIndex(){
+		window.location.href = "index.html";
+	}
+	
+	function goMapping(){
+		window.location.href = "mapping.html";
+	}

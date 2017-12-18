@@ -1,30 +1,33 @@
-navigation:
-    command: 'roslaunch summit_xl_navigation move_base.launch'
-    params: 'prefix:=summit_xl_a_'
-    autorun: false
-    process: ''
-
-mapping: 
-    command: 'roslaunch summit_xl_localization slam_gmapping.launch'
-    params: 'prefix:=summit_xl_a_'
-    autorun: false
-    process: ''
-   
-map_saver: 
-    command: 'rosrun map_server map_saver'
-    params: ''
-    autorun: false
-    process: ''
-    maps_folder: '/home/asoriano/workspaces/multi_summitxl/src/map_nav_manager/map'
-
-map_server: 
-    command: 'rosrun map_server map_server'
-    params: ''
-    autorun: false
-    process: '' 
-
 localization:
-    command: 'roslaunch summit_xl_localization amcl.launch'
-    params: 'prefix:=summit_xl_a_'
-    autorun: false
-    process: '' 
+  args: ''
+  autorun: false
+  command: roslaunch summit_xl_localization amcl.launch
+  params: prefix:=summit_xl_a_
+  process: ''
+map_saver:
+  args: ''
+  command: rosrun map_server map_saver
+  default_map: treshabitaciones
+  maps_folder: /home/asoriano/workspaces/multi_summitxl/src/map_nav_manager/map
+  params: ''
+  process: ''
+map_server:
+  args: ''
+  autorun: false
+  command: rosrun map_server map_server
+  default_map: treshabitaciones
+  maps_folder: /home/asoriano/workspaces/multi_summitxl/src/map_nav_manager/map
+  params: _frame_id:=summit_xl_a_map
+  process: ''
+mapping:
+  args: ''
+  autorun: false
+  command: roslaunch summit_xl_localization slam_gmapping.launch
+  params: prefix:=summit_xl_a_
+  process: ''
+navigation:
+  args: ''
+  autorun: false
+  command: roslaunch summit_xl_navigation move_base.launch
+  params: prefix:=summit_xl_a_
+  process: ''

@@ -35,6 +35,7 @@
 import subprocess
 import shlex
 import os
+import yaml
 
 import rospy
 import rospkg
@@ -50,8 +51,8 @@ from std_srvs.srv import *
 from map_nav_manager.srv import *
 
 
-DEFAULT_FREQ = 100.0
-MAX_FREQ = 500.0
+DEFAULT_FREQ = 10.0
+MAX_FREQ = 100.0
 
 
 # Class Template of Robotnik component for Pyhton
@@ -91,10 +92,17 @@ class MapNavManagerNode:
 		self.start_navigation = False
 		self.stop_navigation = False
 		self.save_map = False
-		self.load_map = False
+		self.set_default_map = False
+		self.stop_map_server = False
+		self.start_map_server = False
+		self.start_localization = False
+		self.stop_localization = False
 
 		self.mapping = False
 		self.navigation = False
+		self.map_server = False
+		self.localization = False
+		
 		
 		self.commands = {}
 		self.commands['mapping'] = args['mapping']		
@@ -108,7 +116,10 @@ class MapNavManagerNode:
 		self.load_map_command = 'rosrun map_server map_server'
 		self.navigation_command = 'roslaunch map_nav_manager navigation.launch' #params?
 		self.map_name = ''
-
+		
+		self._config_params_file = args['config_params_file']	
+		rp = rospkg.RosPack()
+		self._config_params_file_path = os.path.join(rp.get_path('map_nav_manager'), 'config', self._config_params_file)
 
 		self.t_publish_state = threading.Timer(self.publish_state_timer, self.publishROSstate)
 
@@ -118,7 +129,10 @@ class MapNavManagerNode:
 		self.stop_mapping_srv = None
 		self.stop_navigation_srv = None
 		self.save_map_srv = None
-		self.load_map_srv = None
+		self.start_map_server_srv = None
+		self.stop_map_server_srv = None
+		self.start_localization_srv = None
+		self.stop_localization_srv = None
 
 	# ===================================================================================================================================
 	# ===================================================================================================================================
@@ -130,7 +144,12 @@ class MapNavManagerNode:
 			@type req: std_srv/Empty
 		'''
 
-		rospy.loginfo('startMappingServiceCb: called!')
+		#rospy.loginfo('startMappingServiceCb: called!')
+		if self.map_server:
+			return SetFilenameResponse(False, "Map server is running. Mapping is not allowed")
+		if self.localization:
+			return SetFilenameResponse(False, "Localization process is running. Mapping is not allowed")
+			
 		if not self.mapping:
 			self.start_mapping = True
 			#self.stop_mapping = False
@@ -151,7 +170,7 @@ class MapNavManagerNode:
 	# ===================================================================================================================================
 	# ===================================================================================================================================
 	def startNavigationServiceCb(self, req):
-		rospy.loginfo('startNavigationServiceCb: called!')
+		#rospy.loginfo('startNavigationServiceCb: called!')
 		if not self.navigation:
 			self.start_navigation = True
 		return TriggerResponse(True, "Successfull!")
@@ -160,7 +179,7 @@ class MapNavManagerNode:
 	# ===================================================================================================================================
 
 	def stopNavigationServiceCb(self, req):
-		rospy.loginfo('stopNavigationServiceCb: called!')
+		#rospy.loginfo('stopNavigationServiceCb: called!')
 		if self.navigation:
 			self.stop_navigation = True
 		#self.run_slam_gmapping = False
@@ -170,12 +189,13 @@ class MapNavManagerNode:
 	#===================================================================================================================================
 
 	def saveMapServiceCb(self, req):
-		rospy.loginfo('saveMapServiceCb: called!')
+		#rospy.loginfo('saveMapServiceCb: called!')
 		# self.run_slam_gmapping = False
 		# si no esta mapping a true es poruqe no esta funcionando gmapping luego no hay topic /map para salvar
 		if self.mapping:
 			# rospy.loginfo(req.name)
 			self.map_name = req.name
+			self.set_default_map = req.use_it_by_default
 			self.save_map = True
 			return SetFilenameResponse(True, "Map saved correctly")
 		else:
@@ -185,19 +205,92 @@ class MapNavManagerNode:
 	#===================================================================================================================================
 		  
 
-	def loadMapServiceCb(self, req):
-		rospy.loginfo('loadMapServiceCb: called!')
-		if not self.navigation:
+	def startMapServerServiceCb(self, req):
+		#rospy.loginfo('startMapServerServiceCb: called!')
+		
+		if self.mapping:
+			return SetFilenameResponse(False, "Mapping process is running. Map server is not allowed")
+		
+		if not self.map_server:
 			# rospy.loginfo(req.name)
 			self.map_name = req.name
-			self.load_map = True
-			return SetFilenameResponse(True, "El mapa se ha cargado correctamente")
+			self.set_default_map = req.use_it_by_default
+			self.start_map_server = True
+			return SetFilenameResponse(True, "Running map server with map %s"%(req.name))
 		else:
-			return SetFilenameResponse(False, "El proceso de navegacion esta ejecutandose")
+			return SetFilenameResponse(True, "Map server already running")
 
 
+	 #===================================================================================================================================
+	#===================================================================================================================================
+		  
+
+	def stopMapServerServiceCb(self, req):
+		#rospy.loginfo('stopMapServerServiceCb: called!')
+		
+		if not self.map_server:
+			return TriggerResponse(False, "Map server not running!")
+		else:
+			self.stop_map_server = True	
+			return TriggerResponse(True, "Successfull!")
 
 
+    # ===================================================================================================================================
+	# ===================================================================================================================================
+
+	def startLocalizationServiceCb(self, req):
+		'''
+			ROS service for starting localization nodes
+		'''
+
+		#rospy.loginfo('startLocalizationServiceCb: called!')
+		if self.mapping:
+			return SetFilenameResponse(False, "Mapping process is running. Localization is not allowed")
+		
+		if not self.localization:
+			self.start_localization = True
+
+		return TriggerResponse(True, "Successfull!")
+
+	# ===================================================================================================================================
+	# ===================================================================================================================================
+
+	def stopLocalizationServiceCb(self, req):
+		'''
+			ROS service for stoping localization nodes
+		'''
+		#rospy.loginfo('stopLocalizationServiceCb: called!')
+		if self.localization:
+			self.stop_localization= True
+		return TriggerResponse(True, "Successfull!")
+
+  
+	# ===================================================================================================================================
+	# ===================================================================================================================================
+
+	def autoRunLocAndNavServiceCb(self, req):
+		'''
+			ROS service to set the autorun configuration
+		'''
+		#rospy.loginfo('%s::autoRunLocAndNavServiceCb: called',self.node_name)
+		
+		if self.loadYaml() == 0:
+			self.dict_yaml['map_server']['autorun'] = req.data
+			self.dict_yaml['localization']['autorun'] = req.data
+			self.dict_yaml['navigation']['autorun'] = req.data
+			
+			if self.saveYaml() != 0:
+				rospy.logerr('%s::autoRunLocAndNavServiceCb: error saving yaml config file', self.node_name)
+				return SetBoolResponse(False, "Error updating yaml")
+			else:
+				rospy.loginfo('%s::autoRunLocAndNavServiceCb: default params updated successfully', self.node_name)
+				return SetBoolResponse(True, "Successfull!")
+		else:
+			rospy.logerr('%s::autoRunLocAndNavServiceCb: error reading yaml config file', self.node_name)
+			return SetBoolResponse(False, "Error updating yaml")
+		
+
+  
 	# ===================================================================================================================================
 	# ===================================================================================================================================
 	
@@ -211,7 +304,8 @@ class MapNavManagerNode:
 				rospy.logwarn("startProcess: process for %s already running", command_type)
 				return 0
 				
-			command = self.commands[command_type]['command'] + ' ' + self.commands[command_type]['params']
+			command = self.commands[command_type]['command'] + ' ' + self.commands[command_type]['params'] + ' ' + self.commands[command_type]['args']
+			rospy.logwarn("startProcess: command %s ", command)
 			command = shlex.split(command)
 			try:
 				self.commands[command_type]['process'] = subprocess.Popen(command)
@@ -343,26 +437,102 @@ class MapNavManagerNode:
 
 	def saveMap(self):
 		'''
-			ROS start navigation nodes (amcl, move_base)
-			@param req: Required action
-			@type req: std_srv/Empty
+			Saves the current map into the desired folder
 		'''
 		if self.commands.has_key('map_saver'):
-			self.commands['map_saver']['params'] = '-f ' + self.commands['map_saver']['maps_folder'] + '/' + self.map_name
+			self.commands['map_saver']['args'] = '-f ' + self.commands['map_saver']['maps_folder'] + '/' + self.map_name
 		
 		self.startProcess('map_saver')
 		self.waitProcess('map_saver')
 		self.save_map = False
+		
+		# Need to modify config yaml file to autorun mapping
+		if self.set_default_map:
+			if self.loadYaml() == 0:
+				self.dict_yaml['map_server']['default_map'] = self.map_name
+				self.commands['map_server']['default_map'] = self.map_name
+				if self.saveYaml() != 0:
+					rospy.logerr('%s::saveMap: error saving yaml config file', self.node_name)
+				else:
+					rospy.loginfo('%s::saveMap: map %s saved as default one', self.node_name, self.map_name)
+			else:
+				rospy.logerr('%s::saveMap: error loading yaml config file', self.node_name)	
+			self.set_default_map = False
 
 	# ===================================================================================================================================
 	# ===================================================================================================================================
 
-	def loadMap(self):
-		if self.load_map:
-			command = self.load_map_command + self.map_name + ".yaml"
-			command = shlex.split(command)
-			subprocess.Popen(command)
-			self.load_map = False
+	def startMapServer(self):
+		'''
+			Starts a map server with the desired map
+		'''
+		if self.set_default_map:
+			if self.loadYaml() == 0:
+				self.dict_yaml['map_server']['default_map'] = self.map_name
+				self.commands['map_server']['default_map'] = self.map_name
+				if self.saveYaml() != 0:
+					rospy.logerr('%s::saveMap: error saving yaml config file', self.node_name)
+				else:
+					rospy.loginfo('%s::saveMap: map %s saved as default one', self.node_name, self.map_name)
+			else:
+				rospy.logerr('%s::saveMap: error loading yaml config file', self.node_name)	
+			self.set_default_map = False
+			
+			
+		if self.map_name == '' and self.commands['map_server'].has_key('default_map'):
+			self.map_name = self.commands['map_server']['default_map']
+			rospy.logwarn('startMapServer: setting map name to default one: %s', self.map_name)
+			
+		if self.commands.has_key('map_server'):
+			map_file = self.map_name
+			self.commands['map_server']['args'] = self.commands['map_server']['maps_folder'] + '/' + map_file + '.yaml'
+			
+		if self.startProcess('map_server') == 0:
+			self.map_server = True
+			
+		self.start_map_server = False
+		
+	# ===================================================================================================================================
+	# ===================================================================================================================================
+
+	def stopMapServer(self):
+		'''
+			
+		'''
+		if self.stopProcess('map_server') == 0:
+			self.map_server = False
+			
+		self.stop_map_server = False
+	
+	  # ===================================================================================================================================
+	# ===================================================================================================================================
+
+	def startLocalization(self):
+		'''
+			Starts localization nodes
+		'''
+		if self.startProcess('localization') == 0:
+			self.localization = True
+		
+		self.start_localization = False
+		
+		return
+
+	# ===================================================================================================================================
+	# ===================================================================================================================================
+
+	def stopLocalization(self):
+		'''
+			ROS service for stoping localization nodes
+		'''
+		if self.stopProcess('localization') == 0:
+			self.localization = False
+		
+		self.stop_localization = False
+		
+		return
+
+	
 
 	# ===================================================================================================================================
 	# ===================================================================================================================================
@@ -400,12 +570,17 @@ class MapNavManagerNode:
 		# self.service_client = rospy.ServiceProxy('service_name', ServiceMsg)
 		# ret = self.service_client.call(ServiceMsg)
 
-		self.run_mapping_srv = rospy.Service('~start_mapping_srv', Trigger, self.startMappingServiceCb)
-		self.run_navigation_srv = rospy.Service('~start_navigation_srv', Trigger, self.startNavigationServiceCb)
-		self.stop_mapping_srv = rospy.Service('~stop_mapping_srv', Trigger, self.stopMappingServiceCb)
-		self.stop_navigation_srv = rospy.Service('~stop_navigation_srv', Trigger, self.stopNavigationServiceCb)
-		self.save_map_srv = rospy.Service('~save_map_srv', SetFilename, self.saveMapServiceCb)
-		self.load_map_srv = rospy.Service('~load_map_srv', SetFilename, self.loadMapServiceCb)
+		self.run_mapping_srv = rospy.Service('~start_mapping', Trigger, self.startMappingServiceCb)
+		self.run_navigation_srv = rospy.Service('~start_navigation', Trigger, self.startNavigationServiceCb)
+		self.stop_mapping_srv = rospy.Service('~stop_mapping', Trigger, self.stopMappingServiceCb)
+		self.stop_navigation_srv = rospy.Service('~stop_navigation', Trigger, self.stopNavigationServiceCb)
+		self.save_map_srv = rospy.Service('~save_map', SetFilename, self.saveMapServiceCb)
+		self.start_map_server_srv = rospy.Service('~start_map_server', SetFilename, self.startMapServerServiceCb)
+		self.stop_map_server_srv = rospy.Service('~stop_map_server', Trigger, self.stopMapServerServiceCb)
+		self.start_localization_srv = rospy.Service('~start_localization', Trigger, self.startLocalizationServiceCb)
+		self.stop_localization_srv = rospy.Service('~stop_localization', Trigger, self.stopLocalizationServiceCb)
+		
+		self.stop_localization_srv = rospy.Service('~autorun_loc_and_nav', SetBool, self.autoRunLocAndNavServiceCb)
 
 		self.ros_initialized = True
 
@@ -548,6 +723,17 @@ class MapNavManagerNode:
 			self.setup()
 
 		else:
+			# checks auto-run flags
+			# available map server, navigation and localization
+			if self.commands['map_server']['autorun']:
+				self.start_map_server = True
+			
+			if self.commands['localization']['autorun']:
+				self.start_localization = True
+			
+			if self.commands['navigation']['autorun']:
+				self.start_navigation = True
+			
 			self.switchToState(State.STANDBY_STATE)
 
 
@@ -568,19 +754,30 @@ class MapNavManagerNode:
 		'''
 			Actions performed in ready state
 		'''
+		# MAPPING
 		if self.start_mapping:
 			self.startMappingNodes()
-		if self.stop_mapping:
+		elif self.stop_mapping:
 			self.stopMappingNodes()
+		# NAVIGATION	
 		if self.start_navigation:
 			self.startNavigationNodes()
-		if self.stop_navigation:
+		elif self.stop_navigation:
 			self.stopNavigationNodes()
+		# SAVE MAP	
 		if self.save_map:
 			self.saveMap()
-		if self.load_map:
-			self.loadMap()
-
+		# MAP SERVER	
+		if self.start_map_server:
+			self.startMapServer()
+		elif self.stop_map_server:
+			self.stopMapServer()
+		# LOCALIZATION
+		if self.start_localization:
+			self.startLocalization()
+		elif self.stop_localization:
+			self.stopLocalization()
+		
 		return
 
 
@@ -669,10 +866,57 @@ class MapNavManagerNode:
 		self.msg_state.state.real_freq = self.real_freq
 		self.msg_state.mapping = self.mapping
 		self.msg_state.navigation = self.navigation
+		self.msg_state.map_server = self.map_server
+		self.msg_state.localization = self.localization
 		self._state_publisher.publish(self.msg_state)
 
 		self.t_publish_state = threading.Timer(self.publish_state_timer, self.publishROSstate)
 		self.t_publish_state.start()
+		
+	def loadYaml(self):
+		'''
+			Loads the saved positions/states from the config file into memory
+			@return 0 if OK
+			@return -1 if ERROR
+		'''
+		try:
+			# opens the file in read mode
+			f = open(self._config_params_file_path, 'r')
+			self.dict_yaml = yaml.safe_load(f)
+			if self.dict_yaml is None:
+				self.dict_yaml = {}
+			#rospy.loginfo('loadYaml: dict = %s'%self.dict_yaml)
+			f.close()
+			
+		except IOError, e:
+			rospy.logerr('%s:loadYaml:  error openning file %s: %s'%(self.node_name, self._config_params_file_path, e))
+			return -1
+		
+		except yaml.scanner.ScannerError, e:
+			rospy.logerr('%s:loadYaml:  error parsing file %s: %s'%(self.node_name, self._config_params_file_path, e))
+			return -1
+		
+		return 0
+		
+	
+	def saveYaml(self):
+		'''
+			Saves positions/states from memory to file
+			@return 0 if OK
+			@return -1 if ERROR
+		'''
+		try:
+			# opens the file in read mode
+			f = open(self._config_params_file_path, 'w')
+			f.write( yaml.dump(self.dict_yaml, default_flow_style=False))
+			f.close()
+			
+		except IOError, e:
+			rospy.logerr('%s:loadYaml:  error openning file %s: %s'%(self.node_name, self._config_params_file_path, e))
+			return -1
+			
+		return 0
+		
 
 	"""
 	def topicCb(self, msg):
@@ -683,8 +927,6 @@ class MapNavManagerNode:
 		'''
 		# DEMO
 		rospy.loginfo('RComponent:topicCb')
-
-
 	def serviceCb(self, req):
 		'''
 			ROS service server
@@ -704,6 +946,7 @@ def main():
 
     arg_defaults = {
         'topic_state': 'state',
+        'config_params_file': 'map_nav_manager.yaml',
         'desired_freq': DEFAULT_FREQ,
         'navigation': {},
         'mapping': {},
@@ -733,4 +976,4 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
+	main()
