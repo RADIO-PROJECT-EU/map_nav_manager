@@ -188,7 +188,7 @@ class PointPathManager(InteractiveMarkerServer):
 		
 		# Menu handler to create a menu
 		self.menu_handler = MenuHandler()
-		h_first_entry = self.menu_handler.insert( "Waypoints" )
+		#h_first_entry = self.menu_handler.insert( "Waypoints" )
 		h_second_entry = self.menu_handler.insert( "Navigation" )
 		entry = self.menu_handler.insert( "Go", parent=h_second_entry, callback=self.startRouteCB)	# Send the path from the first point to the last one
 		entry = self.menu_handler.insert( "Stop", parent=h_second_entry, callback=self.stopRouteCB)	# Stops the current path 
