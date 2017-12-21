@@ -1,33 +1,21 @@
 <?xml version="1.0"?>
+
 <launch>
+	
   <arg name="global_frame_id" default="map"/>
-  <arg name="map_nav_marker_name" default="map_nav_manager_interactive_marker"/>
-  <arg name="move_base_marker_name" default="goto_interactive_marker"/>
   <arg name="poi_marker_name" default="poi_interactive_marker"/>
   <arg name="poi_topic_marker_name" default="poi_interactive_marker"/>
-  <arg name="init_pose_marker_name" default="init_pose_interactive_marker"/>
   <arg name="init_pose_topic_name" default="initialpose"/>
-  <arg name="path_marker_name" default="path_interactive_marker"/>
   <arg name="goto_planner" default="move_base"/>
   	
   <node name="map_nav_manager" pkg="map_nav_manager" type="map_nav_manager_node.py">
 	<rosparam file="$(find map_nav_manager)/config/map_nav_manager.yaml" command="load"/>    
   </node>
 
- <!-- interactive marker to send the initial pose to the amcl -->
-  <node name="$(arg map_nav_marker_name)" pkg="map_nav_manager" type="map_nav_manager_interactive_marker.py">
+  <node name="$(arg poi_marker_name)" pkg="map_nav_manager" type="poi_marker.py">
 	<param name="frame_id" value="$(arg global_frame_id)"/>
 	<param name="init_pose_topic_name" value="$(arg init_pose_topic_name)"/>
-        <param name="goto_planner" value="$(arg goto_planner)"/>
-  </node>	
-  
-  <!-- marker proxy for the web -->
-  <node name="$(arg map_nav_marker_name)_proxy" pkg="interactive_marker_proxy" args="topic_ns:=$(arg map_nav_marker_name) target_frame:=/$(arg global_frame_id)" type="proxy"/>
-
-
-
-	<node name="$(arg poi_marker_name)" pkg="map_nav_manager" type="poi_marker.py">
-		<param name="frame_id" value="$(arg global_frame_id)"/>	
+	<param name="goto_planner" value="$(arg goto_planner)"/>	
   </node>	
 
   <node name="$(arg poi_marker_name)_proxy" pkg="interactive_marker_proxy" args="topic_ns:=$(arg poi_topic_marker_name) target_frame:=/$(arg global_frame_id)" type="proxy"/>

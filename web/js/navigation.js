@@ -69,13 +69,13 @@ $(document).ready(function() {
 		  topic: map_topic
 		});
 		
-		var interactiveMarkerClient = new ROS3D.InteractiveMarkerClient({
+		/*var interactiveMarkerClient = new ROS3D.InteractiveMarkerClient({
 		  ros : ros,
 		  camera : viewer.camera,
 		  rootObject : viewer.selectableObjects,
 		  tfClient : tfClient,
 		  topic: namespace+'/map_nav_manager_interactive_marker'
-		});
+		});*/
 		
 		var poiInteractiveMarkerClient = new ROS3D.InteractiveMarkerClient({
 			ros : ros,
@@ -84,6 +84,7 @@ $(document).ready(function() {
 			tfClient : tfClient,
 			topic: namespace+'/poi_interactive_marker'
 		  });
+		
 	});
 	
 	

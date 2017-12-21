@@ -72,13 +72,13 @@ $(document).ready(function() {
       topic: map_topic
     });
     
-    var interactiveMarkerClient = new ROS3D.InteractiveMarkerClient({
+    /*var interactiveMarkerClient = new ROS3D.InteractiveMarkerClient({
       ros : ros,
       camera : viewer.camera,
       rootObject : viewer.selectableObjects,
       tfClient : tfClient,
       topic: namespace+'/map_nav_manager_interactive_marker'
-	});
+	});*/
 	
 	readPOIs();
 	
@@ -102,8 +102,7 @@ function startMapping(){
 		svc.callService(function(res){
 			console.log("Response received");
 			});	
-			window.alert("Mapping process initiated. Press OK.");
-	
+			window.alert("Mapping process initiated. Press OK.");	
 	}
 
 }

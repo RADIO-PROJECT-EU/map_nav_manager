@@ -4,7 +4,7 @@
  */
 
 var ROS3D = ROS3D || {
-  REVISION : '8-devel'
+  REVISION : 'develop'
 };
 
 // Marker types
@@ -67,7 +67,7 @@ ROS3D.makeColorMaterial = function(r, g, b, a) {
       blending : THREE.NormalBlending
     });
   } else {
-    return new THREE.MeshLambertMaterial({
+    return new THREE.MeshPhongMaterial({
       color : color.getHex(),
       opacity : a,
       blending : THREE.NormalBlending
@@ -140,13 +140,11 @@ ROS3D.findClosestPoint = function(targetRay, mouseRay) {
  * @returns the closest axis point
  */
 ROS3D.closestAxisPoint = function(axisRay, camera, mousePos) {
-  var projector = new THREE.Projector();
-
   // project axis onto screen
   var o = axisRay.origin.clone();
-  projector.projectVector(o, camera);
+  o.project(camera);
   var o2 = axisRay.direction.clone().add(axisRay.origin);
-  projector.projectVector(o2, camera);
+  o2.project(camera);
 
   // d is the axis vector in screen space (d = o2-o)
   var d = o2.clone().sub(o);
@@ -162,7 +160,7 @@ ROS3D.closestAxisPoint = function(axisRay, camera, mousePos) {
 
   // go back to 3d by shooting a ray
   var vector = new THREE.Vector3(mp.x, mp.y, 0.5);
-  projector.unprojectVector(vector, camera);
+  vector.unproject(camera);
   var mpRay = new THREE.Ray(camera.position, vector.sub(camera.position).normalize());
 
   return ROS3D.findClosestPoint(axisRay, mpRay);

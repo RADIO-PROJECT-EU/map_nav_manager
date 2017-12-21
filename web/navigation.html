@@ -9,21 +9,22 @@
 
     <!-- Bootstrap -->
     <link href="css/bootstrap.min.css" rel="stylesheet">
-    <link href="css/common.css" rel="stylesheet">
+	<link href="css/common.css" rel="stylesheet">
     
     <script src="js/jquery.min.js"></script>
     <script src="js/bootstrap.min.js"></script>
     <script type="text/javascript" src="js/three.js"></script>
-	<script type="text/javascript" src="js/ColladaLoader.js"></script>
+
 	<script type="text/javascript" src="js/STLLoader.js"></script>
-	<script type="text/javascript" src="js/ColladaLoader2.js"></script>
-	<script type="text/javascript" src="js/eventemitter2.min.js"></script>
+	<!--script type="text/javascript" src="js/ColladaLoader2.js"></script-->
+	<script type="text/javascript" src="js/eventemitter2.js"></script>
 	<script type="text/javascript" src="js/easeljs.min.js"></script>
 	<script type="text/javascript" src="js/ros3d.js"></script>
 	<script type="text/javascript" src="js/nav2d.js"></script>
 	<script type="text/javascript" src="js/roslib.js"></script>
 	<script type="text/javascript" src="js/ros2d.js"></script>
-	
+	<!--WARNING! THE IMPORT OF COLLADALOADER MUST BE DONE AFTER THE ROS3D.JS IMPORT otherwise the model is not shown correctly-->
+	<script type="text/javascript" src="js/ColladaLoader.js"></script>
 	<script type="text/javascript" src="js/global_config.js"></script>
 	<script type="text/javascript" src="js/common.js"></script>
 	<script type="text/javascript" src="js/navigation.js"></script>
