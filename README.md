@@ -76,7 +76,7 @@ Example:
 
 http://localhost:8001
 
-**4- Creating a map
+**4- Creating a map**
 
 * Select Mapping & Navigation
 * Press 'Start mapping'
@@ -86,7 +86,7 @@ http://localhost:8001
   * If you want to use this map by default, set the checkbox 'Use this map by default'
 * You have to stop the process of mapping by pressing 'Stop mapping' when the map is finished
 
-**5- Localization & Navigation
+**5- Localization & Navigation**
 
 * Select Localization & Navigation
 * Press 'Start Map Server' to load a pre-saved map
