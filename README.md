@@ -17,7 +17,7 @@ This packages was based on the package map_nav_manager from [Jose Rapado](https:
 The web will need the model urdf of the robot you are going to visualize. To access the model you have to link the description package inside the web folder. To do it you can use the script located into the scripts folders:
 
 ```
-> link_robot_description.sh robot_description_package
+> link_robot_description.sh turtlebot_description
 ```
 
 **2- Edit the file global_config.js in the folder web/js**
@@ -26,8 +26,8 @@ There are some global variables that need to be configured:
 
 ```
 var hostname = 'localhost'
-var namespace = '/summit_xl_a'
-var map_frame = 'summit_xl_a_map'
+var namespace = ''
+var map_frame = 'map'
 var map_topic = namespace+'/map'
 ```
 
@@ -76,6 +76,26 @@ Example:
 
 http://localhost:8001
 
+**4- Creating a map
+
+* Select Mapping & Navigation
+* Press 'Start mapping'
+* Move the robot around manually o by using the navigation marker
+  * In case you want to use the navigation marker, please press the 'Start navigation' button
+* When you want to save the map, set the name in the field 'Map name' and press 'Save map' button
+  * If you want to use this map by default, set the checkbox 'Use this map by default'
+* You have to stop the process of mapping by pressing 'Stop mapping' when the map is finished
+
+**5- Localization & Navigation
+
+* Select Localization & Navigation
+* Press 'Start Map Server' to load a pre-saved map
+  * You can specify the name of the map (without any extension like .yaml or .pgm), otherwise it will be used the default map specified in the config file
+* Press 'Start Localization' to run the localization node (amcl)
+  * Set the init pose of the robot by using the interactive marker and the option 'Init Pose'
+* Press 'Start Navigation' to start the navigation node (move_base)
+  * Use the interactive marker to command the robot to any position with the option 'Go' and 'Stop'
+* Press 'Enable Autorun' to run all of the localization & navigation nodes by default whenever the robot/map_nav_manager starts 
 
 ## 4- Nodes
 

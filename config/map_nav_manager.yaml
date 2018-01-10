@@ -1,33 +1,33 @@
 localization:
   args: ''
   autorun: true
-  command: roslaunch summit_xl_localization amcl.launch
-  params: prefix:=summit_xl_a_
+  command: roslaunch turtlebot_navigation radio_amcl.launch
+  params: scan_topic:=/hokuyo_base/scan
   process: ''
 map_saver:
   args: ''
   command: rosrun map_server map_saver
   default_map: map1
-  maps_folder: /home/rnavarro/catkin_ws/src/map_nav_manager/map
+  maps_folder: /home/rnavarro/workspaces/radio_ws/src/map_nav_manager/map
   params: ''
   process: ''
 map_server:
   args: ''
   autorun: true
   command: rosrun map_server map_server
-  default_map: mapa13
-  maps_folder: /home/rnavarro/catkin_ws/src/map_nav_manager/map
-  params: _frame_id:=summit_xl_a_map
+  default_map: map2
+  maps_folder: /home/rnavarro/workspaces/radio_ws/src/map_nav_manager/map
+  params: ''
   process: ''
 mapping:
   args: ''
   autorun: false
-  command: roslaunch summit_xl_localization slam_gmapping.launch
-  params: prefix:=summit_xl_a_
+  command: roslaunch turtlebot_navigation radio_gmapping.launch
+  params: scan_topic:=/hokuyo_base/scan
   process: ''
 navigation:
   args: ''
   autorun: true
-  command: roslaunch summit_xl_navigation move_base.launch
-  params: prefix:=summit_xl_a_
+  command: roslaunch turtlebot_navigation radio_move_base.launch
+  params: scan_topic:=/hokuyo_base/scan local_planner:=teb
   process: ''

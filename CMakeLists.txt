@@ -17,6 +17,8 @@ find_package(catkin REQUIRED COMPONENTS
     move_base
     gmapping
     robotnik_msgs
+    interactive_markers
+    interactive_marker_proxy
 )
 
 ## System dependencies are found with CMake's conventions
